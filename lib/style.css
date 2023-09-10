@@ -1,0 +1,12 @@
+/*Centering the div*/
+/*https://stackoverflow.com/questions/14123999/center-a-div-horizontally-and-vertically*/
+
+body {
+    position: absolute;
+    background-color: #1b1b1b;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
