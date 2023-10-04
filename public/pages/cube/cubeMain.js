@@ -14,7 +14,7 @@ let timerGraphic;
 
 
 function preload() {
-  buttonSound = loadSound("../sounds/button-beep.wav");
+  buttonSound = loadSound('../../sounds/button-beep.wav');
 }
 
 function setup() {
