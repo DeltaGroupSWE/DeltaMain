@@ -8,13 +8,13 @@ let sOn;
 let sOff;
 
 function preload(){
-  switchflipping = loadSound("../sounds/switchflip.wav");
-  switchgamelose = loadSound('../sounds/switchgamelose.wav');
-  switchgamewin = loadSound("../sounds/switchgamewin.mp3")
-  imgOn = loadImage('../sprites/lighton.png');
-  imgOff = loadImage('../sprites/lightoff.png');
-  sOn = loadImage('../sprites/switchOn.png');
-  sOff = loadImage('../sprites/switchOff.png');
+  switchflipping = loadSound("/public/assets/sounds/switchflip.wav");
+  switchgamelose = loadSound('/public/assets/sounds/switchgamelose.wav');
+  switchgamewin = loadSound("/public/assets/sounds/switchgamewin.mp3")
+  imgOn = loadImage('/public/assets/sprites/lighton.png');
+  imgOff = loadImage('/public/assets/sprites/lightoff.png');
+  sOn = loadImage('/public/assets/sprites/switchOn.png');
+  sOff = loadImage('/public/assets/sprites/switchOff.png');
 }
 
 class flipSwitch{

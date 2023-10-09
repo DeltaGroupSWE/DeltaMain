@@ -5,7 +5,7 @@ let number = 0;
 let counter = 1;
 
 function preload() {
-  buttonSound = loadSound("../sounds/button-beep.wav");
+  buttonSound = loadSound("/public/assets/sounds/button-beep.wav");
 }
 
 function setup() {
@@ -172,7 +172,7 @@ function displayUserInput() {
 }
 
 function toHome() {
-  window.location.href = "../cube/index.html";
+  window.location.href = "/public/pages/cube/index.html";
 }
 
 function windowResized(){
