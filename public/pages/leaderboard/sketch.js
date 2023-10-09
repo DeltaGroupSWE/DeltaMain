@@ -61,5 +61,5 @@ drawLeaderBoard();
 }
 
 function returnToMenu(){
-    window.location.href = '../Home/index.html';
+    window.location.href = '../home/index.html';
 }

@@ -61,7 +61,7 @@ function drawTitle(){
 }
 
 function returnHome(){
-    window.location.href = '../Home/index.html';
+    window.location.href = '../home/index.html';
 }
 
 function createReturnHomeButton(){
