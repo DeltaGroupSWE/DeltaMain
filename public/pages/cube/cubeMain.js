@@ -77,7 +77,7 @@ function setup() {
   quitButton.style(`border: 1px solid #000000`);
   // end styling button  //mousePressed Event
   quitButton.mousePressed(() => {
-    window.location.href = "../Home/index.html";
+    window.location.href = "/public/pages/home/index.html";
   });
 
   /*
