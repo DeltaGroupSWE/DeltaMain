@@ -33,7 +33,7 @@ function setup() {
   cubeRotY = -QUARTER_PI;
   const l = 1;//sideLength/2;
   colorCodes = [color(255, 45, 0),color(246, 255, 0),color(0, 255, 239),color(255, 0, 208),color(0, 255, 38),color(0, 19, 255)];
-  faceColors = ['faceRed','faceYellow','wordPuzzle','sliderPuzzle','faceGreen','faceBlue'];
+  faceColors = ['SwitchPuzzle','NumberPuzzle','wordPuzzle','SliderPuzzle','faceGreen','faceBlue'];
   let id = 101;
   cubeSides.push(new cubeFace( 0, 0, l, 0, 0,      colorCodes[0],faceColors[0],id));    //front
   cubeSides.push(new cubeFace( 0, 0,-l, 0,-PI,     colorCodes[1],faceColors[1],id+10));  //back
@@ -253,7 +253,7 @@ class cubeFace{
   }
   
   goToGame = () => {
-    window.location.href = "../" + this.name + "/index.html";
+    window.location.href = "../../components/puzzles/" + this.name + "/index.html";
   }
 
   goToFace = () => {
