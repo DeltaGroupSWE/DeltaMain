@@ -1,14 +1,19 @@
-var words = [
-    ["fan", "you", "bat", "cab", "zoo", "gap", "gag", "ham", "all", "mad", "jet", "war", "van", "jaw", "gas", "lab", "had", "bar", "egg", "day"],
-    ["hand", "date", "vast", "wake", "want", "rack", "east", "baby", "able", "make", "cake", "face", "name", "base", "gain", "unit", "yolk", "wack", "back", "fall"],
-    ["yield", "until", "unite", "raise", "quest", "dance", "value", "radar", "radio", "jewel", "carry", "zebra", "above", "quack", "quick", "vapor", "ideal", "yacht", "ocean", "again"],
-    ["impact", "tactic", "nature", "narrow", "import", "unless", "object", "garage", "native", "wander", "nation", "factor", "unlike", "handle", "family", "yogurt", "happen", "almost", "gather", "jacket"],
-    ["unknown", "vehicle", "imagine", "natural", "package", "machine", "uniform", "quantum", "quarter", "october", "quality", "variety", "reflect", "success"],
-    ["domestic", "dominant", "profound", "magnetic", "military", "platform", "negative", "positive", "critical", "standard", "constant", "religion", "absolute", "relative", "savoury", "society"],
-    ["abandoned", "abilities", "chocolate", "education", "household", "objective", "practical", "reinforce", "strategic", "vegetable", "wonderful", "wonderful"],
-    ["absorption", "accelerate", "acceptable", "background", "bankruptcy", "basketball", "biological", "collection", "commercial", "distribute", "efficiency", "electronic", "employment", "generation", "government", "guidelines", "historical", "importance", "impressive", "industrial", "inevitable", "leadership", "literature", "mainstream", "obligation", "operations", "opposition", "percentage", "perception", "productive", "profession", "regardless", "regulation", "resistance", "resolution", "structured", "submission", "technology", "television", "themselves", "tournament"],
-    ["achievement", "comprehensive", "institution", "imagination", "legislation", "measurement", "negotiation", "observation", "perspective", "recognition", "satisfaction", "understanding"],
-];
+let words;
+let hintsObject;
+
+fetch('../../../assets/csvs/words.csv')  // Adjust the path accordingly
+    .then(response => response.text())
+    .then(data => {
+        words = parseWordsCSV(data);
+    })
+    .catch(error => console.error('Error fetching the CSV:', error));
+
+fetch('../../../assets/csvs/hints.csv')  // Adjust the path accordingly
+    .then(response => response.text())
+    .then(data => {
+        hintsObject = parseHintsCSV(data);
+    })
+    .catch(error => console.error('Error fetching the CSV:', error));
 
 class WordPuzzle extends Puzzle {
     constructor(renderer, difficulty = 0) {
@@ -16,15 +21,18 @@ class WordPuzzle extends Puzzle {
     }
 
     setupGame() {
-        console.log('Setting up the puzzle');
-        this.word = words[this.difficulty][(Math.floor(Math.random() * words[this.difficulty].length))].toLocaleUpperCase()
-        var remaining = new Set()
+        this.difficulty = Math.min(this.difficulty, words.length - 1)
+        this.lCaseWord = words[this.difficulty][(Math.floor(Math.random() * words[this.difficulty].length))]
+        this.hint = hintsObject[this.lCaseWord]
+        this.displayHint = false
+        this.word = this.lCaseWord.toLocaleUpperCase()
         this.wordMap = new Map()
         this.positionMap = new Map()
         this.squareSize = Math.floor(0.7*this.renderer.width/this.word.length)
         this.padding = Math.floor(0.1*this.renderer.width/this.word.length)
         this.originalPos = [Math.floor(0.1*this.renderer.width) + this.squareSize/2, Math.floor(0.5*this.renderer.height)]
         this.mouseTarget = -1
+        var remaining = new Set()
 
         for(var i = 0; i< this.word.length; i++){
             remaining.add(i)
@@ -40,13 +48,27 @@ class WordPuzzle extends Puzzle {
     }
 
     drawGame() {
-        console.log('drawing...');
         for(var i = 0; i< this.word.length; i++){
             // fill(244, 122, 158);
-            this.renderer.rect(this.positionMap.get(i), this.originalPos[1], this.squareSize, this.squareSize, 10)
+            drawingContext = this.renderer.drawingContext;
+            rect(this.positionMap.get(i), this.originalPos[1], this.squareSize, this.squareSize, 10)
             this.renderer.textAlign(CENTER);
             this.renderer.textSize(25);
             this.renderer.text(this.wordMap.get(i), this.positionMap.get(i) , this.originalPos[1])
+        }
+
+        //diplay hint at the bottom center if displayHint, else clickable button to toggle
+        if (this.displayHint){
+            this.renderer.textAlign(CENTER);
+            this.renderer.textSize(25);
+            this.renderer.text(this.hint, this.renderer.width/2 , this.renderer.height - 50)
+        }
+        else{
+            drawingContext = this.renderer.drawingContext;
+            rect(this.renderer.width/2, this.renderer.height - 50, 150, 50, 10)
+            this.renderer.textAlign(CENTER);
+            this.renderer.textSize(25);
+            this.renderer.text('Hint?', this.renderer.width/2 , this.renderer.height - 50)
         }
     }
 
@@ -71,19 +93,20 @@ class WordPuzzle extends Puzzle {
     }
 
     setMouseTarget(target) {
-        console.log(target);
         this.mouseTarget = target;
     }
 
     handleMousePressed(mx, my){
         this.setMouseTarget(this.mouseOverWhichRectangle(mx, my));
+        if (!this.displayHint && mx > this.renderer.width/2 - 75 && mx < this.renderer.width/2 + 75 && my > this.renderer.height - 75 && my < this.renderer.height - 25){
+            this.displayHint = true
+        }
     }
 
     handleMouseReleased(mx, my){
         this.positionMap.set(this.mouseTarget, this.originalPos[0] + (this.mouseTarget)*(this.squareSize + this.padding))
         this.mouseTarget = -1
         if(this.isSolved()){
-            console.log('WINNER!');
             this.difficulty++;
             this.setupGame();
         }
@@ -120,4 +143,20 @@ class WordPuzzle extends Puzzle {
 //TODO: use an iterator to make this more efficient. i.e. don't need to convert to array
 function getRandomElementFromSet(set) {
     return [...set][Math.floor(Math.random() * set.size)];
+}
+
+function parseWordsCSV(data) {
+    const rows = data.trim().split("\n");
+    return rows.map(row => row.trim().split(","));
+}
+
+function parseHintsCSV(data) {
+    const rows = data.trim().split("\n");
+    const hints = {};
+    for (let i = 1; i < rows.length; i++) {
+        const [word, hint] = rows[i].split(",");
+        hints[word] = hint;
+    }
+    
+    return hints;
 }
