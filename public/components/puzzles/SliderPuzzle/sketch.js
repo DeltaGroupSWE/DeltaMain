@@ -1,6 +1,10 @@
+// ---------------------------------------------------
+// THIS FILE IS NO LONGER USED, KEEPING FOR REFERENCE
+// ---------------------------------------------------
+
 let buttonSound;
 
-function preload(){
+function preload() {
 }
 
 function setup() {
@@ -15,7 +19,7 @@ const spacing = winWidth / 100; // Spacing between boxes
 const startX = winWidth / 6; // Starting X position
 const startY = winHeight / 5; // Starting Y position
 
-function draw(){
+function draw() {
     let x = startX;
     let y = startY;
 
@@ -57,7 +61,7 @@ const puzzleState = {
     B3: "B3",//
     C3: "  " //     C3 is empty in final puzzle state
 };
-  
+
 function move(direction) {
     if (!isMoving) {
         //console.log(direction);
@@ -71,38 +75,34 @@ function move(direction) {
             case "left":
                 if (col === "C")
                     invalidMove();
-                else
-                    {
-                        isMoving = true;
-                        moveLeft();
-                    }
+                else {
+                    isMoving = true;
+                    moveLeft();
+                }
                 break;
             case "right":
                 if (col === "A")
                     invalidMove();
-                else
-                    {
-                        isMoving = true;
-                        moveRight();
-                    }
+                else {
+                    isMoving = true;
+                    moveRight();
+                }
                 break;
             case "up":
                 if (row === "3")
                     invalidMove();
-                else
-                    {
-                        isMoving = true;
-                        moveUp();
-                    }
+                else {
+                    isMoving = true;
+                    moveUp();
+                }
                 break;
             case "down":
                 if (row === "1")
                     invalidMove();
-                else
-                    {
-                        isMoving = true;
-                        moveDown();
-                    }
+                else {
+                    isMoving = true;
+                    moveDown();
+                }
                 break;
             default:
                 break;
@@ -144,7 +144,7 @@ function checkIfComplete() {
 
 function shufflePuzzleState() {
     const moves = ["left", "right", "up", "down"];
-    
+
     for (let i = 0; i < 500; i++) {
         const randomMove = moves[Math.floor(Math.random() * moves.length)];
         move(randomMove);
@@ -164,23 +164,23 @@ function keyReleased() {
 
 function keyPressed() {
     if (!keyPressedFlag) {
-      keyPressedFlag = true;
-      if (key === "a" || key === "ArrowLeft") {
-        move("left");
-      }
-      if (key === "d" || key === "ArrowRight") {
-        move("right");
-      }
-      if (key === "w" || key === "ArrowUp") {
-        move("up");
-      }
-      if (key === "s" || key === "ArrowDown") {
-        move("down");
-      }
+        keyPressedFlag = true;
+        if (key === "a" || key === "ArrowLeft") {
+            move("left");
+        }
+        if (key === "d" || key === "ArrowRight") {
+            move("right");
+        }
+        if (key === "w" || key === "ArrowUp") {
+            move("up");
+        }
+        if (key === "s" || key === "ArrowDown") {
+            move("down");
+        }
     }
 }
-  
-function debug(){
+
+function debug() {
     console.log(puzzleState.A1 + ", " + puzzleState.B1 + ", " + puzzleState.C1);
     console.log(puzzleState.A2 + ", " + puzzleState.B2 + ", " + puzzleState.C2);
     console.log(puzzleState.A3 + ", " + puzzleState.B3 + ", " + puzzleState.C3);
@@ -316,3 +316,4 @@ function moveDown() {
             break;
     }
 }
+

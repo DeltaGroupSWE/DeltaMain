@@ -47,7 +47,7 @@ class Puzzle {
     //3d perspective. That will be done by the main game
     
     // This is an event handler for mouse events
-    // The main game should call this on a click and pass the mouse's x/y
+    // The main game should call this on a left click press without release and pass the mouse's x/y
     //If we need to add more of the events we can, these are just the ones I've seen used so far in the games
     handleMouseClick(mx, my) {
         console.log('Handling puzzle\'s mouse event')
