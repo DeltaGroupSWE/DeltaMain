@@ -171,6 +171,8 @@ function drawHUD(){
   //timerGraphic.background(0);
   timerGraphic.textSize(50);
   timerGraphic.textAlign(CENTER,CENTER);
+  timerGraphic.stroke(0)
+  timerGraphic.strokeWeight(3);
   timerGraphic.text(timer.formatTime(timer.elapsedTime), urw/2,urh/2);
   push();
   //scale here for view plane

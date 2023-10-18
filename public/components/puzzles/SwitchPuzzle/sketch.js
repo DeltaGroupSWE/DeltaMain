@@ -6,6 +6,7 @@ let imgOn;
 let imgOff;
 let sOn;
 let sOff;
+let timer;
 
 function preload(){
   switchflipping = loadSound("../../../assets/sounds/switchflip.wav");
@@ -109,6 +110,11 @@ class flipSwitchGame{
 
 function setup() {
   createCanvas(winWidth *0.95, winHeight * 0.95);
+
+  // intitalizing timer
+  timer = new Timer();
+  timer.setupTimer();
+  timer.startTimer();  
 }
 
 let flipGame = new flipSwitchGame();
@@ -129,6 +135,23 @@ function draw() {
   fill('black');
   text("Flipping a switch flips itself and the ones next to it, flip all 5 to yellow to win!", (winWidth / 2) + 100, 50);
   */
+
+  // updating timer
+  timer.updateTimer();
+
+  // calculate x and y position relative to canvas size
+  const timerTextX = width - width * 0.1;
+  const timerTextY = height * 0.1;
+  
+  // displaying timer on canvas
+  push(); // saves current drawing style
+  textSize(50);
+  fill(255);
+  stroke(0);
+  strokeWeight(3);
+  text(timer.formatTime(timer.elapsedTime), width - 250, height - 750);
+  pop(); // restores original state of drawing style
+
 }
 
 
