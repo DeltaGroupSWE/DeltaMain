@@ -10,7 +10,7 @@ function setup() {
     createCamera(0,0, z);
     sideLength = 1000;
     renderer = createGraphics(sideLength,sideLength);
-    puzzle = new WordPuzzle(renderer, 0);
+    puzzle = new SliderPuzzle(renderer, 0);
     puzzle.setupGame();
 }
 
@@ -41,6 +41,10 @@ function mouseDragged() {
 
 function mouseReleased() {
     puzzle.handleMouseReleased(scaleMouseX(), scaleMouseY());
+}
+
+function keyPressed(){
+    puzzle.handleKeyPressed(keyCode);
 }
 
 function scaleMouseX(){

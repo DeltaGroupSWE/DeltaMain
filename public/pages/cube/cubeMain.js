@@ -59,14 +59,13 @@ function setup() {
     );
   }
   */
-  const fontSize = winWidth * 0.03;
+  //const fontSize = winWidth * 0.03;
 
   timer = new Timer();
   timer.setupTimer();
   timer.startTimer();
   timerGraphic = createGraphics(200,100);
   
-
   // Quit Game button
   //styling button
   quitButton = createButton("Quit");
@@ -107,6 +106,8 @@ function setup() {
 let TargetRotX = 0;
 let TargetRotY = 0;
 let autoRotate = false;
+let cubeLocked = false; 
+let gameSelected = -1;
 
 function draw() {
   mBackground(200);
@@ -114,7 +115,7 @@ function draw() {
   //debugMode();
 
   //use mouse movement when pressed to drive rotation
-  if(mouseIsPressed){ //&& cubeLocked = false){
+  if(mouseIsPressed && !cubeLocked){
     cubeRotY += (mouseX - pmouseX)*0.005;
     cubeRotX += -(mouseY - pmouseY)*0.005;
   }
@@ -146,7 +147,7 @@ function draw() {
 }
 function drawHUD(){
   let z = ((height/2) / tan(PI/6));
-  let screenPlane = z*9/10 - 10;
+  let screenPlane = z*9/10;
 
   /*
   //near plane reference 
@@ -193,14 +194,39 @@ function windowResized(){
 }
 
 function mouseClicked(){
-
+  if(!cubeLocked) return;
+  cubeSides[gameSelected].game.handleMouseClicked(scaleMouseX(),scaleMouseY());
 }
 
 function doubleClicked(){
+  if(!cubeLocked) return;
+  cubeSides[gameSelected].game.handleMouseClicked(scaleMouseX(),scaleMouseY());
+}
 
+function keyPressed(){
+  if(!cubeLocked) return;
+  cubeSides[gameSelected].game.handleKeyPressed(keyCode);
+}
+
+function scaleMouseX(){
+  let cubeProjSize = (z*sideLength)/(10*(z-sideLength/2));
+  mx  = mouseX - width/2 + cubeProjSize;
+  //console.log(mouseX);
+  console.log(mx);
+  return mx;
+}
+
+function scaleMouseY(){
+  let cubeProjSize = (z*sideLength)/(10*(z-sideLength/2));
+  my = mouseY - height/2 + cubeProjSize;
+  //console.log(mouseY);
+  //console.log(cubeProjSize/2);
+  console.log(my);
+  return my;
 }
 
 function selectFace(){
+  if(cubeLocked) return
   id = objectAtMouse();
   //console.log(id);
   for(let x = 0; x < cubeSides.length; x+=1){
@@ -214,10 +240,15 @@ function selectGame(){
   //console.log(id);
   for(let x = 0; x < cubeSides.length; x+=1){
     //console.log(cubeSides[x].id)
-    //cubeLocked = true
-    if(cubeSides[x].id === id) cubeSides[x].goToGame();
+    if(cubeSides[x].id === id) {
+      // cubeSides[x].goToGame();
+      cubeLocked = true;
+      gameSelected = x;
+      return;
+    }
   }
-  //cubeLocked = false
+  cubeLocked = false;
+  gameSelected = -1;
 }
 
 class cubeFace{
@@ -231,19 +262,22 @@ class cubeFace{
     this.name = name;
     this.id = id;
     this.gameBuffer = createGraphics(sideLength,sideLength);
-    //this.game = new game(this.gameBuffer);
+    this.game = new SliderPuzzle(this.gameBuffer,0);
+    this.game.setupGame();
 
   }
     
   drawFace(){
-    
+    this.gameBuffer.clear();
     //something like this.game.drawGame(this.gameBuffer, sidelength); ????????
 
-    this.gameBuffer.fill(0);
+    //this.gameBuffer.fill(0);
     this.gameBuffer.background(this.col);
-    this.gameBuffer.textSize(50);
-    this.gameBuffer.textAlign(CENTER);
-    this.gameBuffer.text("this side up",this.gameBuffer.width/2,this.gameBuffer.height/4);
+    this.game.drawGame();
+
+    //this.gameBuffer.textSize(50);
+    //this.gameBuffer.textAlign(CENTER);
+    //this.gameBuffer.text("this side up",this.gameBuffer.width/2,this.gameBuffer.height/4);
 
     mTranslate(this.tx*sideLength/2,this.ty*sideLength/2,this.tz*sideLength/2);
     mRotate(this.rx,createVector(1,0,0));
