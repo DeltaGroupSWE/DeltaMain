@@ -108,7 +108,7 @@ function draw() {
 function drawHUD(){
   let z = ((height/2) / tan(PI/6));
   let screenPlane = z*9/10-1; 
-
+  /*
   //near plane reference 
   let cubeProjSize = (z*sideLength)/(10*(z-sideLength/2)); // same equation for figuring out mouse inputs to a game rendered on a cube face?
   push();
@@ -118,7 +118,7 @@ function drawHUD(){
   strokeWeight(.2);
   plane(cubeProjSize);
   pop();
-
+  */
   //upper right HUD
   //position = 1/10 of position of canvas
   timer.updateTimer();
