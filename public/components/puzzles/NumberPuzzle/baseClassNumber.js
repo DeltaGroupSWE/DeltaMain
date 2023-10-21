@@ -99,9 +99,9 @@ class NumberPuzzle extends Puzzle {
             if (x >= this.startX + 3 * (this.boxSize + this.spacing)) {
                 x = this.startX;
                 y += this.boxSize + this.spacing;
+            }
         }
-    }
-
+        
         return -1;
     }
     
