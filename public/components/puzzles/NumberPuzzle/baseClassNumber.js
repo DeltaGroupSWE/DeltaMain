@@ -17,6 +17,18 @@ class NumberPuzzle extends Puzzle {
 
         console.log('Constructing the puzzle');
         //...//game specific stuff
+        this.numPadContents = {
+            0: "0", //         ---  ---  ---
+            1: "1", //        | 0 || 1 || 2 |
+            2: "2", //         ---  ---  ---
+            3: "3", //        | 3 || 4 || 5 |
+            4: "4", //         ---  ---  ---
+            5: "5", //        | 6 || 7 || 8 |
+            6: "6", //         ---  ---  ---
+            7: "7", //        | 9 ||
+            8: "8", //         ---
+            9: "9"
+        };
     }
 
     setupGame(){
@@ -24,7 +36,6 @@ class NumberPuzzle extends Puzzle {
         //this will be called on each game from the main setup function
         //when adding something to the renderer do it like this
         //this.renderer.textSize(10);
-        this.numSquares = 9;
         this.randomNum = Math.floor(Math.random() * 100) + 1;
         this.boxSize = this.boxWidth / 15; //size of each number box
         this.spacing = this.boxWidth / 100; // spacing between number boxes
@@ -46,10 +57,19 @@ class NumberPuzzle extends Puzzle {
         let x = this.startX;
         let y = this.startY;
         
-        for(let i = 0; i < 9; ++i){
+        for(const key in this.numPadContents){
+            const content = this.numPadContents[key];
             this.renderer.fill(200);
             this.renderer.rect(x,y, this.boxSize, this.boxSize)
             this.renderer.fill(0);
+            this.renderer.textSize(32);
+            this.renderer.textAlign(CENTER, CENTER);
+            this.renderer.text(content, x + this.boxSize / 2, y + this.boxSize / 2);
+            x += this.boxSize + this.spacing;
+            if(x >= this.startX + 3 * (this.boxSize + this.spacing)) {
+                x = this.startX;
+                y += this.boxSize + this.spacing;
+            }
         }
         
     }
