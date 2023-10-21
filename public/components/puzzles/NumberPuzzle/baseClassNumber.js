@@ -80,6 +80,51 @@ class NumberPuzzle extends Puzzle {
         console.log('Checking if the puzzle is solved')
     }
 
+
+    mouseOverWhichRectangle(mx, my) {
+        let x = this.startX;
+        let y = this.startY;
+
+        for (const key in this.numPadContents) {
+            const content = this.numPadContents[key];
+
+            // Check if the mouse coordinates (mx, my) are within the bounds of the current rectangle
+            if (mx >= x && mx <= x + this.boxSize && my >= y && my <= y + this.boxSize) {
+                return key; // Return the key (0 to 9) associated with the clicked/hovered rectangle.
+            }
+
+        // Move to the next rectangle's position
+            x += this.boxSize + this.spacing;
+
+            if (x >= this.startX + 3 * (this.boxSize + this.spacing)) {
+                x = this.startX;
+                y += this.boxSize + this.spacing;
+        }
+    }
+
+        return -1;
+    }
+    
+
+    setMouseTarget(target) {
+        this.mouseTarget = target;
+    }
+
+    handleMousePressed(mx, my){
+        const clickedRectIndex = this.mouseOverWhichRectangle(mx, my);
+
+        }
+    }
+    /*
+    handleMouseReleased(mx, my){
+        this.positionMap.set(this.mouseTarget, this.originalPos[0] + (this.mouseTarget)*(this.squareSize + this.padding))
+        this.mouseTarget = -1
+        if(this.isSolved()){
+            this.difficulty++;
+            this.setupGame();
+        }
+    }
+    */
     //for all input functions need to change event functions ie "mousePresssed()" functions to 
     //handler functions that recieve input parameters from the main game
     //all events needed to be handled by the main game
@@ -89,6 +134,8 @@ class NumberPuzzle extends Puzzle {
     // This is an event handler for mouse events
     // The main game should call this on a left click press without release and pass the mouse's x/y
     //If we need to add more of the events we can, these are just the ones I've seen used so far in the games
+    
+    /*
     handleMouseClick(mx, my) {
         console.log('Handling puzzle\'s mouse event')
     }
@@ -99,5 +146,5 @@ class NumberPuzzle extends Puzzle {
 
     handleKeyPressed(key){}
     handleKeyReleased(key){}
-    
+    */
 }
