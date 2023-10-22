@@ -17,6 +17,7 @@ class NumberPuzzle extends Puzzle {
 
         console.log('Constructing the puzzle');
         //...//game specific stuff
+        //setting contents for the numPad
         this.numPadContents = {
             0: "0", //         ---  ---  ---
             1: "1", //        | 0 || 1 || 2 |
@@ -71,7 +72,7 @@ class NumberPuzzle extends Puzzle {
                 y += this.boxSize + this.spacing;
             }
         }
-        
+
     }
 
     // This is an accessor to check if the puzzle is solved
@@ -93,7 +94,9 @@ class NumberPuzzle extends Puzzle {
         console.log('Handling puzzle\'s mouse event')
     }
 
-    handleMousePressed(mx, my){}
+    handleMousePressed(mx, my){
+        
+    }
     handleMouseDragged(mx, my){}
     handleMouseReleased(mx, my){}
 
