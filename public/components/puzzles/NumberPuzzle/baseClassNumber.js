@@ -78,6 +78,24 @@ class NumberPuzzle extends Puzzle {
             }
         }
 
+        const content = this.enterButton;
+        this.renderer.fill(200);
+        this.renderer.rect(x,y, this.boxSize * 2 + this.spacing, this.boxSize)
+        this.renderer.fill(0);
+        this.renderer.textSize(32);
+        this.renderer.textAlign(CENTER, CENTER);
+        this.renderer.text(content, x + this.boxSize, y + this.boxSize / 2);
+
+        this.renderer.push();
+        this.renderer.fill(200);
+        this.renderer.stroke(0);
+        this.renderer.rect(this.startX, this.startY + 4 * (this.boxSize + this.spacing), this.boxSize * 3, this.boxSize);
+        this.renderer.pop();
+
+        this.renderer.textSize(24);
+        this.renderer.textAlign(LEFT, TOP);
+        this.renderer.fill(0);
+        this.renderer.text(this.inputValue, this.startX + 5, this.startY + 4 * (this.boxSize + this.spacing) + 5);    
 <<<<<<< HEA    
 =======
 >>>>>>> 4d21a155e51988da75991a584139eabf6d00b3c8
