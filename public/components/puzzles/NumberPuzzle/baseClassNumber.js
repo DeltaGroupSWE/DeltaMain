@@ -96,9 +96,6 @@ class NumberPuzzle extends Puzzle {
         this.renderer.textAlign(LEFT, TOP);
         this.renderer.fill(0);
         this.renderer.text(this.inputValue, this.startX + 5, this.startY + 4 * (this.boxSize + this.spacing) + 5);    
-<<<<<<< HEA    
-=======
->>>>>>> 4d21a155e51988da75991a584139eabf6d00b3c8
     }
 
     // This is an accessor to check if the puzzle is solved
