@@ -15,6 +15,8 @@ class NumberPuzzle extends Puzzle {
         super(renderer,difficulty);
         this.boxWidth = renderer.width;
 
+        this.inputValue = '';
+
         console.log('Constructing the puzzle');
         //...//game specific stuff
         this.numPadContents = {
@@ -29,6 +31,8 @@ class NumberPuzzle extends Puzzle {
             8: "8", //         ---
             9: "9"
         };
+
+        this.enterButton = "enter";
     }
 
     setupGame(){
@@ -72,7 +76,25 @@ class NumberPuzzle extends Puzzle {
                 y += this.boxSize + this.spacing;
             }
         }
-        
+
+        const content = this.enterButton;
+        this.renderer.fill(200);
+        this.renderer.rect(x,y, this.boxSize * 2 + this.spacing, this.boxSize)
+        this.renderer.fill(0);
+        this.renderer.textSize(32);
+        this.renderer.textAlign(CENTER, CENTER);
+        this.renderer.text(content, x + this.boxSize, y + this.boxSize / 2);
+
+        this.renderer.push();
+        this.renderer.fill(200);
+        this.renderer.stroke(0);
+        this.renderer.rect(this.startX, this.startY + 4 * (this.boxSize + this.spacing), this.boxSize * 3, this.boxSize);
+        this.renderer.pop();
+
+        this.renderer.textSize(24);
+        this.renderer.textAlign(LEFT, TOP);
+        this.renderer.fill(0);
+        this.renderer.text(this.inputValue, this.startX + 5, this.startY + 4 * (this.boxSize + this.spacing) + 5);        
     }
 
     // This is an accessor to check if the puzzle is solved
@@ -86,7 +108,7 @@ class NumberPuzzle extends Puzzle {
     mouseOverWhichRectangle(mx, my) {
         let x = this.startX;
         let y = this.startY;
-    
+
         for (const key in this.numPadContents) {
             // Check if the mouse coordinates (mx, my) are within the bounds of the current rectangle
             if (mx >= x && mx <= x + this.boxSize && my >= y && my <= y + this.boxSize) {
@@ -101,6 +123,10 @@ class NumberPuzzle extends Puzzle {
                 y += this.boxSize + this.spacing;
             }
         }
+
+        if (mx >= x && mx <= x + this.boxSize * 2 + this.spacing && my >= y && my <= y + this.boxSize) {
+            return 'enter'; // Return 'enter' when the mouse is over the Enter button.
+        }
     
         return -1; // Return -1 if no rectangle was clicked/hovered.
     }
@@ -111,20 +137,15 @@ class NumberPuzzle extends Puzzle {
     }
 
     handleMousePressed(mx, my){
-        const clickedRectIndex = this.mouseOverWhichRectangle(mx, my);
-        console.log(clickedRectIndex);
+        const key = this.mouseOverWhichRectangle(mx, my);
+        if (key == 'enter') this.isSolved();
+        if (key >= '0' && key <= '9') {
+            this.inputValue += key; // Append the typed key to the input value
+        }
         
     }
-    /*
-    handleMouseReleased(mx, my){
-        this.positionMap.set(this.mouseTarget, this.originalPos[0] + (this.mouseTarget)*(this.squareSize + this.padding))
-        this.mouseTarget = -1
-        if(this.isSolved()){
-            this.difficulty++;
-            this.setupGame();
-        }
-    }
-    */
+
+
     //for all input functions need to change event functions ie "mousePresssed()" functions to 
     //handler functions that recieve input parameters from the main game
     //all events needed to be handled by the main game

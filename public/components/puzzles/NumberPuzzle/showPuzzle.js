@@ -1,3 +1,8 @@
+/*
+not being used, changed the files
+*/
+
+
 let puzzle;
 let renderer;
 
