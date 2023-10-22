@@ -54,8 +54,8 @@ function mouseReleased() {
 function scaleMouseX(){
     let cubeProjSize = (z*sideLength)/(10*(z-sideLength/2));
     mx  = mouseX - width/2;
-    //console.log(mouseX);
-    console.log(mx);
+    console.log(mouseX);
+    //console.log(mx);
     return mx;
 }
 

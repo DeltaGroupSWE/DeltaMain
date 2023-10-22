@@ -5,11 +5,12 @@ let z;
 
 function setup() {
     let side = windowHeight*.9;
-    createCanvas(side,side, WEBGL);
+    createCanvas(1000,1000, WEBGL);
     z = (height/2) / tan(PI/6);
     createCamera(0,0, z);
     sideLength = 1000;
     renderer = createGraphics(sideLength,sideLength);
+    
     puzzle = new NumberPuzzle(renderer, 0);
     puzzle.setupGame();
 }
@@ -20,6 +21,7 @@ function draw() {
 
     let screenPlane = z*9/10;
     let cubeProjSize = (z*sideLength)/(10*(z-sideLength/2)); // same equation for figuring out mouse inputs to a game rendered on a cube face?
+    
     push();
     translate(0,0,screenPlane);
     noFill();
@@ -31,12 +33,16 @@ function draw() {
 
     push();
     puzzle.renderer.clear();
+    
     puzzle.renderer.background(150);
+    
     puzzle.drawGame();
+    
     noStroke();
     texture(renderer);
     plane(sideLength);
     pop();
+    
 }
 
 function mouseClicked() {
@@ -53,17 +59,15 @@ function mouseReleased() {
 
 function scaleMouseX(){
     let cubeProjSize = (z*sideLength)/(10*(z-sideLength/2));
-    mx  = mouseX - width/2;
-    //console.log(mouseX);
-    console.log(mx);
+    mx  = mouseX;
+    //console.log(mx);
     return mx;
 }
 
 function scaleMouseY(){
     let cubeProjSize = (z*sideLength)/(10*(z-sideLength/2));
-    my = mouseY - height/2;
-    //console.log(mouseY);
-    //console.log(cubeProjSize/2);
-    console.log(my);
+    my = mouseY;
+    //console.log(my);
     return my;
+
 }

@@ -55,6 +55,7 @@ class NumberPuzzle extends Puzzle {
         //pretyy much anything that can go in setup and draw that affects the canvas and be used this way
 
         let x = this.startX;
+        
         let y = this.startY;
         
         for(const key in this.numPadContents){
@@ -76,6 +77,7 @@ class NumberPuzzle extends Puzzle {
 
     // This is an accessor to check if the puzzle is solved
     // Should return true if the puzzle is solved, or false if it isn't
+
     isSolved() {
         console.log('Checking if the puzzle is solved')
     }
@@ -84,25 +86,23 @@ class NumberPuzzle extends Puzzle {
     mouseOverWhichRectangle(mx, my) {
         let x = this.startX;
         let y = this.startY;
-
+    
         for (const key in this.numPadContents) {
-            const content = this.numPadContents[key];
-
             // Check if the mouse coordinates (mx, my) are within the bounds of the current rectangle
             if (mx >= x && mx <= x + this.boxSize && my >= y && my <= y + this.boxSize) {
                 return key; // Return the key (0 to 9) associated with the clicked/hovered rectangle.
             }
-
-        // Move to the next rectangle's position
+    
+            // Move to the next rectangle's position
             x += this.boxSize + this.spacing;
-
+    
             if (x >= this.startX + 3 * (this.boxSize + this.spacing)) {
                 x = this.startX;
                 y += this.boxSize + this.spacing;
             }
         }
-        
-        return -1;
+    
+        return -1; // Return -1 if no rectangle was clicked/hovered.
     }
     
 
@@ -112,8 +112,8 @@ class NumberPuzzle extends Puzzle {
 
     handleMousePressed(mx, my){
         const clickedRectIndex = this.mouseOverWhichRectangle(mx, my);
-
-        }
+        console.log(clickedRectIndex);
+        
     }
     /*
     handleMouseReleased(mx, my){
