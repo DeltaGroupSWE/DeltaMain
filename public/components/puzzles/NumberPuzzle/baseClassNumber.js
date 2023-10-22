@@ -14,8 +14,12 @@ class NumberPuzzle extends Puzzle {
 
         super(renderer,difficulty);
         this.boxWidth = renderer.width;
+        //let ranNumber = Math.floor(Math.random() * 100) + 1;
 
         this.inputValue = '';
+        this.titleText = "Pick a number between 1-100";
+        this.guessCount = 0;
+        this.previousGuess = '';
 
         console.log('Constructing the puzzle');
         //...//game specific stuff
@@ -34,6 +38,7 @@ class NumberPuzzle extends Puzzle {
         };
 
         this.enterButton = "enter";
+        
     }
 
     setupGame(){
@@ -51,6 +56,7 @@ class NumberPuzzle extends Puzzle {
     // This is the draw function for the puzzle.
     // Everything that the puzzle needs to do to display on the screen should happen here.
     drawGame() {
+        
         console.log('Displaying the puzzle')
         //just like you original setup()
         //this will be called on each game object in the main game's draw funtion
@@ -78,6 +84,8 @@ class NumberPuzzle extends Puzzle {
             }
         }
 
+        
+
         const content = this.enterButton;
         this.renderer.fill(200);
         this.renderer.rect(x,y, this.boxSize * 2 + this.spacing, this.boxSize)
@@ -96,13 +104,42 @@ class NumberPuzzle extends Puzzle {
         this.renderer.textAlign(LEFT, TOP);
         this.renderer.fill(0);
         this.renderer.text(this.inputValue, this.startX + 5, this.startY + 4 * (this.boxSize + this.spacing) + 5);    
+    
+        this.renderer.textSize(24);
+        this.renderer.textAlign(CENTER, TOP);
+        this.renderer.fill(0);
+        this.renderer.text(this.titleText, this.startX+200, this.startY+ 400); // Draw the title text at the top
+        
+        this.renderer.textSize(24);
+        this.renderer.textAlign(CENTER, TOP);
+        this.renderer.fill(0);
+        this.renderer.text("Number of guesses: " + this.guessCount, this.startX+200, this.startY+ 450); // Draw the title text at the top
+        
+        this.renderer.textSize(24);
+        this.renderer.textAlign(CENTER, TOP);
+        this.renderer.fill(0);
+        this.renderer.text("Previous guess: " + this.previousGuess, this.startX+200, this.startY+ 500); // Draw the title text at the top
     }
 
     // This is an accessor to check if the puzzle is solved
     // Should return true if the puzzle is solved, or false if it isn't
 
     isSolved() {
-        console.log('Checking if the puzzle is solved')
+        if(this.inputValue == this.randomNum){
+            this.inputValue = ' ';
+            this.titleText = "You got it!";
+            console.log("solved");
+        }
+        else if (this.inputValue > this.randomNum){
+            this.inputValue = ' ';
+            this.titleText = "Guess is too high, guess again";
+            console.log("Guess is too high");
+        } 
+        else{
+            this.inputValue = ' ';
+            this.titleText = "Guess is too low, guess again";
+            console.log("Guess is too low")
+        } 
     }
 
 
@@ -138,8 +175,13 @@ class NumberPuzzle extends Puzzle {
     }
 
     handleMousePressed(mx, my){
+        console.log(this.randomNum);
         const key = this.mouseOverWhichRectangle(mx, my);
-        if (key == 'enter') this.isSolved();
+        if (key == 'enter'){
+            this.guessCount += 1;
+            this.previousGuess = this.inputValue;
+            this.isSolved();
+        }
         if (key >= '0' && key <= '9') {
             this.inputValue += key; // Append the typed key to the input value
         }
