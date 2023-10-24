@@ -11,6 +11,7 @@ let colorCodes = [];
 let faceColors = [];
 let timer;
 let timerGraphic;
+let z;
 
 
 function preload() {
@@ -21,7 +22,8 @@ function setup() {
   // using windowHeight/windowWidth instead of winHeight/winWidth seems to fix resizing problem
   mCreateCanvas(windowWidth*0.8, windowHeight * 0.9, WEBGL);
   //mOrtho();
-  mCamera(0,0, (height/2) / tan(PI/6));
+  z = ((height/2) / tan(PI/6));
+  mCamera(0,0,z);
   cnv.mouseClicked(selectFace);
   cnv.doubleClicked(selectGame);
   normalMaterial();
@@ -106,7 +108,7 @@ function draw() {
 }
 
 function drawHUD(){
-  let z = ((height/2) / tan(PI/6));
+
   let screenPlane = z*9/10-1; 
   /*
   //near plane reference 
@@ -176,16 +178,16 @@ function keyPressed(){
 }
 
 function scaleMouseX(){
-  let cubeProjSize = (z*sideLength)/(10*(z-sideLength/2));
-  mx  = mouseX - width/2 + cubeProjSize;
+  let scaling = z/(z-sideLength/2)
+  mx  = (mouseX - width/2)/scaling + sideLength/2;
   //console.log(mouseX);
   console.log(mx);
   return mx;
 }
 
 function scaleMouseY(){
-  let cubeProjSize = (z*sideLength)/(10*(z-sideLength/2));
-  my = mouseY - height/2 + cubeProjSize;
+  let scaling = z/(z-sideLength/2)
+  my = (mouseY - height/2)/scaling + sideLength/2;
   //console.log(mouseY);
   //console.log(cubeProjSize/2);
   console.log(my);
@@ -229,8 +231,8 @@ class cubeFace{
     this.name = name;
     this.id = id;
     this.gameBuffer = createGraphics(sideLength,sideLength);
-    this.game = new SliderPuzzle(this.gameBuffer,0);
-    this.game.setupGame();
+    //this.game = new SliderPuzzle(this.gameBuffer,0);
+    //this.game.setupGame();
 
   }
 
@@ -244,7 +246,8 @@ class cubeFace{
 
     //this.gameBuffer.fill(0);
     this.gameBuffer.background(this.col);
-    this.game.drawGame();
+    //this.game.drawGame();
+    this.gameBuffer.circle(scaleMouseX(),scaleMouseY(),10);
 
     //this.gameBuffer.textSize(50);
     //this.gameBuffer.textAlign(CENTER);
