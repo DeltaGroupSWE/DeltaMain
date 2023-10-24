@@ -1,34 +1,48 @@
 let buttonSound;
-let cam1;
-//let camDist;
-let cubeSides = [];
+
+// cube globals
+let cubeScale;
+let sideLength;
 let cubeRotX;
 let cubeRotY;
-let cubeScale;
-let cubeCV;
-let sideLength;
 let colorCodes = [];
 let faceColors = [];
+let cubeSides = [];
+
+// timer globals
 let timer;
 let timerGraphic;
-let z;
 
+//HUD and mouse scaling
+let eyeZ;
 
+//auto rotation
+let TargetRotX;
+let TargetRotY;
+let autoRotate;
+let cubeLocked; 
+let gameSelected;
+
+///////////////////////////////////////////////////////////////////////////////
 function preload() {
   buttonSound = loadSound('../../assets/sounds/button-beep.wav');
 }
 
+///////////////////////////////////////////////////////////////////////////////
 function setup() {
-  // using windowHeight/windowWidth instead of winHeight/winWidth seems to fix resizing problem
   mCreateCanvas(windowWidth*0.8, windowHeight * 0.9, WEBGL);
-  //mOrtho();
-  z = ((height/2) / tan(PI/6));
-  mCamera(0,0,z);
   cnv.mouseClicked(selectFace);
   cnv.doubleClicked(selectGame);
   normalMaterial();
+
+  eyeZ = ((height/2) / tan(PI/6));
+  mCamera(0,0,eyeZ);
+
 	//mPage.show();
 	//mPage.style("display", "inline");
+
+///////////////////////////////////////////////////////////////////////////////
+//Cube setup
   cubeScale = 1;
   sideLength = (height < width ? height/cubeScale : width/cubeScale)/2;
   cubeRotX = -QUARTER_PI;
@@ -44,13 +58,30 @@ function setup() {
   cubeSides.push(new cubeFace( 0,-l, 0, HALF_PI, 0,colorCodes[4],faceColors[4],id+40));  //top
   cubeSides.push(new cubeFace( 0, l, 0,-HALF_PI, 0,colorCodes[5],faceColors[5],id+50));  //bottom
 
+///////////////////////////////////////////////////////////////////////////////
+//Cube autorotation vars
+TargetRotX = 0;
+TargetRotY = 0;
+autoRotate = false;
+cubeLocked = false; 
+gameSelected = -1;
+
+///////////////////////////////////////////////////////////////////////////////
+//Game setup
+//
+cubeSides[0].setupFaceGame(new SliderPuzzle(cubeSides[0].gameBuffer,0));
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+//Timer
   timer = new Timer();
   timer.setupTimer();
   timer.startTimer();
   timerGraphic = createGraphics(200,100);
-  
-  // Quit Game button
-  //styling button
+
+///////////////////////////////////////////////////////////////////////////////
+// Quit Game button
   quitButton = createButton("Quit");
   quitButton.style("background-color: #1A71E6");
   quitButton.style("display: inline-block");
@@ -64,16 +95,9 @@ function setup() {
 
 }
 
-let TargetRotX = 0;
-let TargetRotY = 0;
-let autoRotate = false;
-let cubeLocked = false; 
-let gameSelected = -1;
-
+///////////////////////////////////////////////////////////////////////////////
 function draw() {
   mBackground(200);
-  //mCamera();
-  //debugMode();
 
   //use mouse movement when pressed to drive rotation
   if(mouseIsPressed && !cubeLocked){
@@ -103,13 +127,12 @@ function draw() {
     cubeSides[x].drawFace();
     mPop();
   }
-
-  
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//HUD and HUD components
 function drawHUD(){
-
-  let screenPlane = z*9/10-1; 
+  let screenPlane = eyeZ*9/10-1; 
   /*
   //near plane reference 
   let cubeProjSize = (z*sideLength)/(10*(z-sideLength/2)); // same equation for figuring out mouse inputs to a game rendered on a cube face?
@@ -121,6 +144,11 @@ function drawHUD(){
   plane(cubeProjSize);
   pop();
   */
+ drawTimerHUD(screenPlane);
+
+}
+
+function drawTimerHUD(p){
   //upper right HUD
   //position = 1/10 of position of canvas
   timer.updateTimer();
@@ -138,13 +166,15 @@ function drawHUD(){
   timerGraphic.text(timer.formatTime(timer.elapsedTime), urw/2,urh/2);
   push();
   //scale here for view plane
-  translate(urx/10,ury/10,screenPlane);
+  translate(urx/10,ury/10,p);
   texture(timerGraphic);
   plane(urw/10,urh/10);
   pop();
   timerGraphic.clear();
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//Events
 function windowResized(){
   mResizeCanvans(windowWidth*0.8, windowHeight * 0.9);
   //mCamera(0,0, (height/2) / tan(PI/6));
@@ -152,17 +182,9 @@ function windowResized(){
   for(let x = 0; x < cubeSides.length; x+=1){
     cubeSides[x].gameBuffer.resize(sideLength,sideLength);
   }
-
 }
 
 function mouseClicked(){
-  /*
-  console.log(mouseX - width/2);
-  console.log(mouseY - width/2);
-  console.log(sideLength);
-  let z = ((height/2) / tan(PI/6));
-  console.log((z*sideLength)/(10*(z-sideLength/2)));
-  */
   if(!cubeLocked) return;
   cubeSides[gameSelected].game.handleMouseClicked(scaleMouseX(),scaleMouseY());
 }
@@ -178,24 +200,21 @@ function keyPressed(){
 }
 
 function scaleMouseX(){
-  let scaling = z/(z-sideLength/2)
+  let scaling = eyeZ/(eyeZ-sideLength/2)
   mx  = (mouseX - width/2)/scaling + sideLength/2;
-  //console.log(mouseX);
-  console.log(mx);
   return mx;
 }
 
 function scaleMouseY(){
-  let scaling = z/(z-sideLength/2)
+  let scaling = eyeZ/(eyeZ-sideLength/2)
   my = (mouseY - height/2)/scaling + sideLength/2;
-  //console.log(mouseY);
-  //console.log(cubeProjSize/2);
-  console.log(my);
   return my;
 }
 
-function selectFace(){
-  if(cubeLocked) return
+///////////////////////////////////////////////////////////////////////////////
+//Event listener Functions
+function selectFace(){ // listener for mouseClicked
+  if(cubeLocked) return;
   id = objectAtMouse();
   //console.log(id);
   for(let x = 0; x < cubeSides.length; x+=1){
@@ -204,7 +223,7 @@ function selectFace(){
   }
 }
 
-function selectGame(){
+function selectGame(){ // listener for mouseDoubleClicked
   id = objectAtMouse();
   //console.log(id);
   for(let x = 0; x < cubeSides.length; x+=1){
@@ -220,6 +239,9 @@ function selectGame(){
   gameSelected = -1;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//CubeFace class
+//Contains Graphics object and Puzzle Object as members
 class cubeFace{
   constructor(tx,ty,tz,rx,ry,col,name,id){
     this.tx = tx;
@@ -231,27 +253,23 @@ class cubeFace{
     this.name = name;
     this.id = id;
     this.gameBuffer = createGraphics(sideLength,sideLength);
+    this.game = null;
     //this.game = new SliderPuzzle(this.gameBuffer,0);
     //this.game.setupGame();
 
   }
 
-  setupFaceGame(){
-
+  //accepts new Puzzle() as argument
+  setupFaceGame(game){
+    this.game = game;
+    this.game.setupGame();
   }
     
   drawFace(){
     this.gameBuffer.clear();
-    //something like this.game.drawGame(this.gameBuffer, sidelength); ????????
-
-    //this.gameBuffer.fill(0);
     this.gameBuffer.background(this.col);
-    //this.game.drawGame();
+    if(this.game != null) this.game.drawGame();
     this.gameBuffer.circle(scaleMouseX(),scaleMouseY(),10);
-
-    //this.gameBuffer.textSize(50);
-    //this.gameBuffer.textAlign(CENTER);
-    //this.gameBuffer.text("this side up",this.gameBuffer.width/2,this.gameBuffer.height/4);
 
     mTranslate(this.tx*sideLength/2,this.ty*sideLength/2,this.tz*sideLength/2);
     mRotate(this.rx,createVector(1,0,0));
