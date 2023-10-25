@@ -1,14 +1,14 @@
 let words;
 let hintsObject;
 
-fetch('../../../assets/csvs/words.csv')  // Adjust the path accordingly
+fetch('../../assets/csvs/words.csv')  // Adjust the path accordingly
     .then(response => response.text())
     .then(data => {
         words = parseWordsCSV(data);
     })
     .catch(error => console.error('Error fetching the CSV:', error));
 
-fetch('../../../assets/csvs/hints.csv')  // Adjust the path accordingly
+fetch('../../assets/csvs/hints.csv')  // Adjust the path accordingly
     .then(response => response.text())
     .then(data => {
         hintsObject = parseHintsCSV(data);
@@ -48,10 +48,11 @@ class WordPuzzle extends Puzzle {
     }
 
     drawGame() {
+        this.renderer.rectMode(CENTER);
         for(var i = 0; i< this.word.length; i++){
             // fill(244, 122, 158);
-            drawingContext = this.renderer.drawingContext;
-            rect(this.positionMap.get(i), this.originalPos[1], this.squareSize, this.squareSize, 10)
+            //drawingContext = this.renderer.drawingContext;
+            this.renderer.rect(this.positionMap.get(i), this.originalPos[1], this.squareSize, this.squareSize, 10)
             this.renderer.textAlign(CENTER);
             this.renderer.textSize(25);
             this.renderer.text(this.wordMap.get(i), this.positionMap.get(i) , this.originalPos[1])
@@ -64,8 +65,8 @@ class WordPuzzle extends Puzzle {
             this.renderer.text(this.hint, this.renderer.width/2 , this.renderer.height - 50)
         }
         else{
-            drawingContext = this.renderer.drawingContext;
-            rect(this.renderer.width/2, this.renderer.height - 50, 150, 50, 10)
+            //drawingContext = this.renderer.drawingContext;
+            this.renderer.rect(this.renderer.width/2, this.renderer.height - 50, 150, 50, 10)
             this.renderer.textAlign(CENTER);
             this.renderer.textSize(25);
             this.renderer.text('Hint?', this.renderer.width/2 , this.renderer.height - 50)
