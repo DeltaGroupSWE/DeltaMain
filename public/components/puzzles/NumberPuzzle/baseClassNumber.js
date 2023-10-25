@@ -74,7 +74,7 @@ class NumberPuzzle extends Puzzle {
             this.renderer.fill(200);
             this.renderer.rect(x,y, this.boxSize, this.boxSize)
             this.renderer.fill(0);
-            this.renderer.textSize(32);
+            this.renderer.textSize(this.renderer.width*0.05);
             this.renderer.textAlign(CENTER, CENTER);
             this.renderer.text(content, x + this.boxSize / 2, y + this.boxSize / 2);
             x += this.boxSize + this.spacing;
@@ -90,7 +90,7 @@ class NumberPuzzle extends Puzzle {
         this.renderer.fill(200);
         this.renderer.rect(x,y, this.boxSize * 2 + this.spacing, this.boxSize)
         this.renderer.fill(0);
-        this.renderer.textSize(32);
+        this.renderer.textSize(this.renderer.width*0.05);
         this.renderer.textAlign(CENTER, CENTER);
         this.renderer.text(content, x + this.boxSize, y + this.boxSize / 2);
 
@@ -100,25 +100,25 @@ class NumberPuzzle extends Puzzle {
         this.renderer.rect(this.startX, this.startY + 4 * (this.boxSize + this.spacing), this.boxSize * 3, this.boxSize);
         this.renderer.pop();
 
-        this.renderer.textSize(24);
+        this.renderer.textSize(this.renderer.width*0.04);
         this.renderer.textAlign(LEFT, TOP);
         this.renderer.fill(0);
         this.renderer.text(this.inputValue, this.startX + 5, this.startY + 4 * (this.boxSize + this.spacing) + 5);    
     
-        this.renderer.textSize(24);
+        this.renderer.textSize(this.renderer.width*0.04);
         this.renderer.textAlign(CENTER, TOP);
         this.renderer.fill(0);
-        this.renderer.text(this.titleText, this.startX+200, this.startY+ 400); // Draw the title text at the top
+        this.renderer.text(this.titleText, this.renderer.width/2, this.startY + 5 * (this.boxSize + this.spacing) + 5); // Draw the title text at the top
         
-        this.renderer.textSize(24);
+        this.renderer.textSize(this.renderer.width*0.04);
         this.renderer.textAlign(CENTER, TOP);
         this.renderer.fill(0);
-        this.renderer.text("Number of guesses: " + this.guessCount, this.startX+200, this.startY+ 450); // Draw the title text at the top
+        this.renderer.text("Number of guesses: " + this.guessCount, this.renderer.width/2, this.startY + 6 * (this.boxSize + this.spacing) + 5); // Draw the title text at the top
         
-        this.renderer.textSize(24);
+        this.renderer.textSize(this.renderer.width*0.04);
         this.renderer.textAlign(CENTER, TOP);
         this.renderer.fill(0);
-        this.renderer.text("Previous guess: " + this.previousGuess, this.startX+200, this.startY+ 500); // Draw the title text at the top
+        this.renderer.text("Previous guess: " + this.previousGuess, this.renderer.width/2, this.startY + 7 * (this.boxSize + this.spacing) + 5); // Draw the title text at the top
     }
 
     // This is an accessor to check if the puzzle is solved
