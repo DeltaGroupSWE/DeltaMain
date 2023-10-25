@@ -87,11 +87,11 @@ class flipSwitchGame extends Puzzle{
 
   flipBoard(mx,my){
     if(this.gameOver != true){
-      if(mx > this.sw1.x && mx < this.sw1.x + 40 && my > this.sw1.y && my < this.sw1.y + 60){this.sw1.flip(); this.sw2.flip(); this.sw5.flip();}
-      else if(mx > this.sw2.x && mx < this.sw2.x + 40 && my > this.sw2.y && my < this.sw2.y + 60){this.sw1.flip(); this.sw2.flip(); this.sw3.flip();}
-      else if(mx > this.sw3.x && mx < this.sw3.x + 40 && my > this.sw3.y && my < this.sw3.y + 60){this.sw2.flip(); this.sw3.flip(); this.sw4.flip();}
-      else if(mx > this.sw4.x && mx < this.sw4.x + 40 && my > this.sw4.y && my < this.sw4.y + 60){this.sw3.flip(); this.sw4.flip(); this.sw5.flip();}
-      else if(mx > this.sw5.x && mx < this.sw5.x + 40 && my > this.sw5.y && my < this.sw5.y + 60){this.sw4.flip(); this.sw5.flip(); this.sw1.flip();}
+      if(mx > this.sw1.x && mx < this.sw1.x + this.sw1.w && my > this.sw1.y && my < this.sw1.y + this.sw1.h){this.sw1.flip(); this.sw2.flip(); this.sw5.flip();}
+      else if(mx > this.sw2.x && mx < this.sw2.x + this.sw2.w && my > this.sw2.y && my < this.sw2.y + this.sw2.h){this.sw1.flip(); this.sw2.flip(); this.sw3.flip();}
+      else if(mx > this.sw3.x && mx < this.sw3.x + this.sw3.w && my > this.sw3.y && my < this.sw3.y + this.sw2.h){this.sw2.flip(); this.sw3.flip(); this.sw4.flip();}
+      else if(mx > this.sw4.x && mx < this.sw4.x + this.sw4.w && my > this.sw4.y && my < this.sw4.y + this.sw2.h){this.sw3.flip(); this.sw4.flip(); this.sw5.flip();}
+      else if(mx > this.sw5.x && mx < this.sw5.x + this.sw5.w && my > this.sw5.y && my < this.sw5.y + this.sw2.h){this.sw4.flip(); this.sw5.flip(); this.sw1.flip();}
     }
   }
 
