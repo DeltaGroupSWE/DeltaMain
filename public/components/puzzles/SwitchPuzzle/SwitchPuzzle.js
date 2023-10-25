@@ -87,11 +87,11 @@ class flipSwitchGame extends Puzzle{
 
   flipBoard(mx,my){
     if(this.gameOver != true){
-      if(mx > this.sw1.x && mx < this.sw1.x + 80 && my > this.sw1.y && my < this.sw1.y + 120){this.sw1.flip(); this.sw2.flip(); this.sw5.flip();}
-      else if(mx > this.sw2.x && mx < this.sw2.x + 80 && my > this.sw2.y && my < this.sw2.y + 120){this.sw1.flip(); this.sw2.flip(); this.sw3.flip();}
-      else if(mx > this.sw3.x && mx < this.sw3.x + 80 && my > this.sw3.y && my < this.sw3.y + 120){this.sw2.flip(); this.sw3.flip(); this.sw4.flip();}
-      else if(mx > this.sw4.x && mx < this.sw4.x + 80 && my > this.sw4.y && my < this.sw4.y + 120){this.sw3.flip(); this.sw4.flip(); this.sw5.flip();}
-      else if(mx > this.sw5.x && mx < this.sw5.x + 80 && my > this.sw5.y && my < this.sw5.y + 120){this.sw4.flip(); this.sw5.flip(); this.sw1.flip();}
+      if(mx > this.sw1.x && mx < this.sw1.x + 40 && my > this.sw1.y && my < this.sw1.y + 60){this.sw1.flip(); this.sw2.flip(); this.sw5.flip();}
+      else if(mx > this.sw2.x && mx < this.sw2.x + 40 && my > this.sw2.y && my < this.sw2.y + 60){this.sw1.flip(); this.sw2.flip(); this.sw3.flip();}
+      else if(mx > this.sw3.x && mx < this.sw3.x + 40 && my > this.sw3.y && my < this.sw3.y + 60){this.sw2.flip(); this.sw3.flip(); this.sw4.flip();}
+      else if(mx > this.sw4.x && mx < this.sw4.x + 40 && my > this.sw4.y && my < this.sw4.y + 60){this.sw3.flip(); this.sw4.flip(); this.sw5.flip();}
+      else if(mx > this.sw5.x && mx < this.sw5.x + 40 && my > this.sw5.y && my < this.sw5.y + 60){this.sw4.flip(); this.sw5.flip(); this.sw1.flip();}
     }
   }
 
@@ -102,7 +102,7 @@ class flipSwitchGame extends Puzzle{
       this.renderer.strokeWeight(4);
       this.renderer.textSize(this.renderer.width * 0.1);
       this.renderer.fill('black');
-      this.renderer.text('You lose', this.renderer.width/2, this.renderer.height/2);
+      this.renderer.text('You lose', this.renderer.width/2, this.renderer.height/1.25);
     }
     else if(this.sw1.onOff === true && this.sw2.onOff === true && this.sw3.onOff === true && this.sw4.onOff === true && this.sw5.onOff === true){
       this.gameOver = true;
@@ -110,7 +110,7 @@ class flipSwitchGame extends Puzzle{
       this.renderer.strokeWeight(4);
       this.renderer.textSize(this.renderer.width *0.1);
       this.renderer.fill('black');
-      this.renderer.text('You win', this.renderer.width/2, this.renderer.height/2 );
+      this.renderer.text('You win', this.renderer.width/2, this.renderer.height/1.25);
     }
     else{
       this.gameOver = false;
