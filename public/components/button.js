@@ -9,6 +9,7 @@ class CustomButton{
     // REQUIRES: Integer, Integer, Integer, Integer
     constructor(PositionX,PositionY,Width,Height){
         
+        
         // Shape
         this.PositionX = PositionX;
         this.PositionY = PositionY;
