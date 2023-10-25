@@ -118,8 +118,8 @@ function draw() {
 
   //use mouse movement when pressed to drive rotation
   if(mouseIsPressed && !cubeLocked && !autoRotate){
-    cubeRotY += (mouseX - pmouseX)*0.005;
-    cubeRotX += -(mouseY - pmouseY)*0.005;
+    cubeRotY += (mouseX - pmouseX)*0.0025;
+    cubeRotX += -(mouseY - pmouseY)*0.0025;
   }
   if(autoRotate){
     let easing = 0.05;
@@ -127,7 +127,7 @@ function draw() {
     let dry = TargetRotY - cubeRotY;
     cubeRotX += drx * easing;
     cubeRotY += dry * easing;
-    if(drx < 0.01 && dry < 0.01) {
+    if(abs(drx) < 0.01 && abs(dry) < 0.01) {
       autoRotate = false;
       cubeRotX = TargetRotX;
       cubeRotY = TargetRotY;
