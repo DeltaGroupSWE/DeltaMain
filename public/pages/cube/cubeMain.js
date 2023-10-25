@@ -1,4 +1,4 @@
-let buttonSound;
+//let buttonSound;
 
 // cube globals
 let cubeScale;
@@ -25,7 +25,7 @@ let gameSelected;
 
 ///////////////////////////////////////////////////////////////////////////////
 function preload() {
-  buttonSound = loadSound('../../assets/sounds/button-beep.wav');
+  //buttonSound = loadSound('../../assets/sounds/button-beep.wav');
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -70,8 +70,7 @@ gameSelected = -1;
 //Game setup
 //
 cubeSides[0].setupFaceGame(new SliderPuzzle(cubeSides[0].gameBuffer,0));
-
-
+//cubeSides[1].setupFaceGame(new flipSwitchGame(cubeSides[1].gameBuffer,0));
 
 ///////////////////////////////////////////////////////////////////////////////
 //Timer
@@ -176,11 +175,11 @@ function drawTimerHUD(p){
 ///////////////////////////////////////////////////////////////////////////////
 //Events
 function windowResized(){
-  mResizeCanvans(windowWidth*0.8, windowHeight * 0.9);
+  //mResizeCanvans(windowWidth*0.8, windowHeight * 0.9);
   //mCamera(0,0, (height/2) / tan(PI/6));
   sideLength = (height < width ? height/cubeScale : width/cubeScale)/2;
   for(let x = 0; x < cubeSides.length; x+=1){
-    cubeSides[x].gameBuffer.resize(sideLength,sideLength);
+    //cubeSides[x].gameBuffer.resize(sideLength,sideLength);
   }
 }
 
@@ -229,7 +228,6 @@ function selectGame(){ // listener for mouseDoubleClicked
   for(let x = 0; x < cubeSides.length; x+=1){
     //console.log(cubeSides[x].id)
     if(cubeSides[x].id === id) {
-      // cubeSides[x].goToGame();
       cubeLocked = true;
       gameSelected = x;
       return;
@@ -269,17 +267,13 @@ class cubeFace{
     this.gameBuffer.clear();
     this.gameBuffer.background(this.col);
     if(this.game != null) this.game.drawGame();
-    this.gameBuffer.circle(scaleMouseX(),scaleMouseY(),10);
+    //this.gameBuffer.circle(scaleMouseX(),scaleMouseY(),10);
 
     mTranslate(this.tx*sideLength/2,this.ty*sideLength/2,this.tz*sideLength/2);
     mRotate(this.rx,createVector(1,0,0));
     mRotate(this.ry,createVector(0,1,0));
     mTexture(this.gameBuffer);
     mPlane(this.id,sideLength);
-  }
-  
-  goToGame = () => {
-    window.location.href = "../../components/puzzles/" + this.name + "/index.html";
   }
 
   goToFace = () => {

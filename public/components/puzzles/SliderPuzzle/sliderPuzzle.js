@@ -133,7 +133,7 @@ class SliderPuzzle extends Puzzle {
 
     move(direction) {
         let emptyCell = this.getEmptyCell();
-        console.log(direction + emptyCell)
+        //console.log(direction + emptyCell)
         let col = emptyCell[0];
         let row = emptyCell[1];
 

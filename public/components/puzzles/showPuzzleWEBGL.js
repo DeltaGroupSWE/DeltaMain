@@ -3,6 +3,7 @@ let renderer;
 let sideLength;
 let z;
 
+
 function setup() {
     let side = windowHeight*.9;
     createCanvas(side,side, WEBGL);
@@ -10,7 +11,7 @@ function setup() {
     createCamera(0,0, z);
     sideLength = side/2;
     renderer = createGraphics(sideLength,sideLength);
-    puzzle = new SliderPuzzle(renderer, 0);
+    puzzle = new flipSwitchGame(renderer, 0);
     puzzle.setupGame();
 }
 
@@ -54,7 +55,7 @@ function scaleMouseX(){
     let cubeProjSize = (z*sideLength)/(10*(z));
     //console.log(sideLength/2);
     mx  = (mouseX - width/2) + sideLength/2;
-    console.log(mx);
+    //console.log(mx);
     return mx;
 }
 
@@ -62,6 +63,6 @@ function scaleMouseY(){
     let cubeProjSize = (z*sideLength)/(10*(z));
     my =  (mouseY - height/2) + sideLength/2;
     //console.log(cubeProjSize/2);
-    console.log(my);
+    //console.log(my);
     return my;
 }
