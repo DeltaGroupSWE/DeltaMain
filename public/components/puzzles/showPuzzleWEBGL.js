@@ -11,7 +11,7 @@ function setup() {
     createCamera(0,0, z);
     sideLength = side/2;
     renderer = createGraphics(sideLength,sideLength);
-    puzzle = new flipSwitchGame(renderer, 0);
+    puzzle = new WordPuzzle(renderer, 0);
     puzzle.setupGame();
 }
 

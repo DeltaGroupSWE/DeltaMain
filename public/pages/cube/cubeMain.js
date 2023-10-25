@@ -87,6 +87,7 @@ gameSelected = -1;
 //Game setup
 //
 cubeSides[0].setupFaceGame(new SliderPuzzle(cubeSides[0].gameBuffer,0));
+cubeSides[1].setupFaceGame(new WordPuzzle(cubeSides[1].gameBuffer,0));
 cubeSides[2].setupFaceGame(new flipSwitchGame(cubeSides[2].gameBuffer,0));
 cubeSides[4].setupFaceGame(new NumberPuzzle(cubeSides[4].gameBuffer,0));
 
@@ -214,6 +215,16 @@ function doubleClicked(){
 function mousePressed(){
   if(!cubeLocked) return;
   cubeSides[gameSelected].game.handleMousePressed(scaleMouseX(),scaleMouseY());
+}
+
+function mouseReleased() {
+  if(!cubeLocked) return;
+  cubeSides[gameSelected].game.handleMouseReleased(scaleMouseX(), scaleMouseY());
+}
+
+function mouseDragged() {
+  if(!cubeLocked) return;
+  cubeSides[gameSelected].game.handleMouseDragged(scaleMouseX(), scaleMouseY());
 }
 
 function keyPressed(){
