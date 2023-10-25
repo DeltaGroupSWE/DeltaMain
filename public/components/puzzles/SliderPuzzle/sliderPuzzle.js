@@ -42,7 +42,7 @@ class SliderPuzzle extends Puzzle {
             this.renderer.fill(200);
             this.renderer.rect(x, y, this.boxSize, this.boxSize);
             this.renderer.fill(0);
-            this.renderer.textSize(32);
+            this.renderer.textSize(this.boxSize/2);
             this.renderer.textAlign(CENTER, CENTER);
             this.renderer.text(content, x + this.boxSize / 2, y + this.boxSize / 2);
             x += this.boxSize + this.spacing;
@@ -59,7 +59,7 @@ class SliderPuzzle extends Puzzle {
             this.renderer.fill(0);
             this.renderer.text("You win!", width / 2, height / 2);
         }
-        this.handleKeyPressed();
+        //this.handleKeyPressed();
     }
 
     isSolved() {
@@ -80,16 +80,17 @@ class SliderPuzzle extends Puzzle {
     }
 
     handleKeyPressed(key) {
-        if (key === "a" || key === "ArrowLeft") {
+        console.log(key);
+        if (key === "a" || key === LEFT_ARROW) {
             this.move("left");
         }
-        if (key === "d" || key === "ArrowRight") {
+        if (key === "d" || key === RIGHT_ARROW) {
             this.move("right");
         }
-        if (key === "w" || key === "ArrowUp") {
+        if (key === "w" || key === UP_ARROW) {
             this.move("up");
         }
-        if (key === "s" || key === "ArrowDown") {
+        if (key === "s" || key === DOWN_ARROW) {
             this.move("down");
         }
     }
@@ -132,7 +133,7 @@ class SliderPuzzle extends Puzzle {
 
     move(direction) {
         let emptyCell = this.getEmptyCell();
-        console.log(direction + emptyCell)
+        //console.log(direction + emptyCell)
         let col = emptyCell[0];
         let row = emptyCell[1];
 
