@@ -1,4 +1,7 @@
 let flag = 0;
+//let timer;
+
+/*
 let switchflipping;
 let switchgamelose;
 let switchgamewin;
@@ -6,20 +9,16 @@ let imgOn;
 let imgOff;
 let sOn;
 let sOff;
-//let timer;
-
-
 function preload(){
   switchflipping = loadSound("../../assets/sounds/switchflip.wav");
-  //switchgamelose = loadSound('../../assets/sounds/switchgamelose.wav');
-  //switchgamewin = loadSound("../../assets/sounds/switchgamewin.mp3")
+  switchgamelose = loadSound('../../assets/sounds/switchgamelose.wav');
+  switchgamewin = loadSound("../../assets/sounds/switchgamewin.mp3")
   imgOn = loadImage('../../assets/sprites/lighton.png');
   imgOff = loadImage('../../assets/sprites/lightoff.png');
   sOn = loadImage('../../assets/sprites/switchOn.png');
   sOff = loadImage('../../assets/sprites/switchOff.png');
-
 }
-
+*/
 class flipSwitch{
   constructor(onOff, x, y, w){
     this.onOff = onOff;

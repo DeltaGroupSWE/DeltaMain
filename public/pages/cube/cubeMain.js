@@ -24,10 +24,27 @@ let cubeLocked;
 let gameSelected;
 
 ///////////////////////////////////////////////////////////////////////////////
+let switchflipping;
+let switchgamelose;
+let switchgamewin;
+let imgOn;
+let imgOff;
+let sOn;
+let sOff;
+function preload(){
+  switchflipping = loadSound("../../assets/sounds/switchflip.wav");
+  switchgamelose = loadSound('../../assets/sounds/switchgamelose.wav');
+  switchgamewin = loadSound("../../assets/sounds/switchgamewin.mp3")
+  imgOn = loadImage('../../assets/sprites/lighton.png');
+  imgOff = loadImage('../../assets/sprites/lightoff.png');
+  sOn = loadImage('../../assets/sprites/switchOn.png');
+  sOff = loadImage('../../assets/sprites/switchOff.png');
+}
+/*
 function preload() {
   //buttonSound = loadSound('../../assets/sounds/button-beep.wav');
 }
-
+*/
 ///////////////////////////////////////////////////////////////////////////////
 function setup() {
   mCreateCanvas(windowWidth*0.8, windowHeight * 0.9, WEBGL);
@@ -70,7 +87,7 @@ gameSelected = -1;
 //Game setup
 //
 cubeSides[0].setupFaceGame(new SliderPuzzle(cubeSides[0].gameBuffer,0));
-//cubeSides[1].setupFaceGame(new flipSwitchGame(cubeSides[1].gameBuffer,0));
+cubeSides[3].setupFaceGame(new flipSwitchGame(cubeSides[3].gameBuffer,0));
 
 ///////////////////////////////////////////////////////////////////////////////
 //Timer
@@ -191,6 +208,11 @@ function mouseClicked(){
 function doubleClicked(){
   if(!cubeLocked) return;
   cubeSides[gameSelected].game.handleMouseClicked(scaleMouseX(),scaleMouseY());
+}
+
+function mousePressed(){
+  if(!cubeLocked) return;
+  cubeSides[gameSelected].game.handleMousePressed(scaleMouseX(),scaleMouseY());
 }
 
 function keyPressed(){
