@@ -1,3 +1,7 @@
+/*
+not being used, changed the files
+*/
+
 let buttonSound;
 /*Number keeps track of last user input*/
 let number = 0;
