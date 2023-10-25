@@ -87,7 +87,8 @@ gameSelected = -1;
 //Game setup
 //
 cubeSides[0].setupFaceGame(new SliderPuzzle(cubeSides[0].gameBuffer,0));
-cubeSides[3].setupFaceGame(new flipSwitchGame(cubeSides[3].gameBuffer,0));
+cubeSides[2].setupFaceGame(new flipSwitchGame(cubeSides[2].gameBuffer,0));
+cubeSides[4].setupFaceGame(new NumberPuzzle(cubeSides[4].gameBuffer,0));
 
 ///////////////////////////////////////////////////////////////////////////////
 //Timer
@@ -116,7 +117,7 @@ function draw() {
   mBackground(200);
 
   //use mouse movement when pressed to drive rotation
-  if(mouseIsPressed && !cubeLocked){
+  if(mouseIsPressed && !cubeLocked && !autoRotate){
     cubeRotY += (mouseX - pmouseX)*0.005;
     cubeRotX += -(mouseY - pmouseY)*0.005;
   }
