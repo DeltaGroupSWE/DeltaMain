@@ -45,14 +45,33 @@ class flipSwitch{
     }
   }
 }
+
 class flipSwitchGame extends Puzzle{
   constructor(renderer,difficulty=0){
     super(renderer, difficulty)
-    this.sw1 = new flipSwitch(false, (this.renderer.width *0.05), this.renderer.height*0.2, this.renderer.width);
-    this.sw2 = new flipSwitch(true,  (this.renderer.width *0.25), this.renderer.height*0.2, this.renderer.width);
-    this.sw3 = new flipSwitch(false, (this.renderer.width *0.45), this.renderer.height*0.2, this.renderer.width);
-    this.sw4 = new flipSwitch(true,  (this.renderer.width *0.65), this.renderer.height*0.2, this.renderer.width);
-    this.sw5 = new flipSwitch(false, (this.renderer.width *0.85), this.renderer.height*0.2, this.renderer.width);
+    let randomOnOff = [true, false];
+
+    let onOffArray = [];
+
+    for(let i = 0; i < 5; ++i){
+      let counterFalse = 0; let counterTrue = 0;
+      onOffArray[i] = random(randomOnOff);
+      for(let j = 0; j < onOffArray.length; ++j){
+        if(onOffArray[j] == true) {++counterTrue;}
+        else{++counterFalse;}
+      }
+      if((counterTrue > 0 && counterFalse == 0) || (counterTrue == 0 && counterTrue > 0)){
+        if(onOffArray[i] == true){onOffArray[i] = false;}
+        else{onOffArray[i] = true;}
+      }
+    }
+
+    this.sw1 = new flipSwitch(onOffArray[0], (this.renderer.width *0.05), this.renderer.height*0.2, this.renderer.width);
+    this.sw2 = new flipSwitch(onOffArray[1],  (this.renderer.width *0.25), this.renderer.height*0.2, this.renderer.width);
+    this.sw3 = new flipSwitch(onOffArray[2], (this.renderer.width *0.45), this.renderer.height*0.2, this.renderer.width);
+    this.sw4 = new flipSwitch(onOffArray[3],  (this.renderer.width *0.65), this.renderer.height*0.2, this.renderer.width);
+    this.sw5 = new flipSwitch(onOffArray[4], (this.renderer.width *0.85), this.renderer.height*0.2, this.renderer.width);
+
     this.gameOver = false;
     this.puzzleID = 1;
   }
