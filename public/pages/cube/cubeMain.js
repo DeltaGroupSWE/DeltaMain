@@ -22,6 +22,7 @@ let TargetRotY;
 let autoRotate;
 let cubeLocked; 
 let gameSelected;
+let rotationDisplay;
 
 ///////////////////////////////////////////////////////////////////////////////
 let switchflipping;
@@ -110,6 +111,8 @@ cubeSides[4].setupFaceGame(new NumberPuzzle(cubeSides[4].gameBuffer,0));
   quitButton.mousePressed(() => {
     window.location.href = "../home/index.html";
   });
+//////////////////////////////////////////////////////////
+rotationDisplay = createGraphics(200,200);
 
 }
 
@@ -122,7 +125,12 @@ function draw() {
     cubeRotY += (mouseX - pmouseX)*0.0025;
     cubeRotX += -(mouseY - pmouseY)*0.0025;
   }
+  if(cubeRotY > PI) cubeRotY -= TWO_PI;
+  if(cubeRotY < -PI) cubeRotY += TWO_PI;
+  if(cubeRotX > PI) cubeRotX -= TWO_PI;
+  if(cubeRotX < -PI) cubeRotX += TWO_PI;
   if(autoRotate){
+    //if(sign(TargetRotX)!= sign(cubeRotX)) 
     let easing = 0.05;
     let drx = TargetRotX - cubeRotX;
     let dry = TargetRotY - cubeRotY;
@@ -163,6 +171,7 @@ function drawHUD(){
   pop();
   */
  drawTimerHUD(screenPlane);
+ //drawRotationDisplay(screenPlane);
 
 }
 
@@ -191,12 +200,33 @@ function drawTimerHUD(p){
   timerGraphic.clear();
 }
 
+function drawRotationDisplay(p){
+  let urw = rotationDisplay.width;   //2*height/10;
+  let urh = rotationDisplay.height; //height/10;
+  let urx = (width/2) - urw/2;
+  let ury = (height/2 ) - urh/2;
+  rotationDisplay.fill(255);
+  //timerGraphic.background(0);
+  rotationDisplay.textSize(50);
+  rotationDisplay.textAlign(CENTER,CENTER);
+  rotationDisplay.stroke(0)
+  rotationDisplay.strokeWeight(3);
+  rotationDisplay.text(cubeRotX.toFixed(2), urw/2,urh/3);
+  rotationDisplay.text(cubeRotY.toFixed(2), urw/2,urh*2/3);
+  push();
+  translate(urx/10,ury/10,p);
+  texture(rotationDisplay);
+  plane(urw/10,urh/10);
+  pop();
+  rotationDisplay.clear();
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //Events
 function windowResized(){
   //mResizeCanvans(windowWidth*0.8, windowHeight * 0.9);
   //mCamera(0,0, (height/2) / tan(PI/6));
-  sideLength = (height < width ? height/cubeScale : width/cubeScale)/2;
+  //sideLength = (height < width ? height/cubeScale : width/cubeScale)/2;
   for(let x = 0; x < cubeSides.length; x+=1){
     //cubeSides[x].gameBuffer.resize(sideLength,sideLength);
   }
@@ -310,10 +340,12 @@ class cubeFace{
     mPlane(this.id,sideLength);
   }
 
-  goToFace = () => {
+  goToFace(){
     //buttonSound.play();
     TargetRotX = -this.rx;
     TargetRotY = -this.ry;
+    //for back face default targetY = PI, but if cubeY is negative we don't want to go long way round
+    if(TargetRotY === PI && cubeRotY < 0) {TargetRotY = -PI;}
     autoRotate = true;
   }
   
