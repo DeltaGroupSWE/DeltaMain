@@ -239,7 +239,7 @@ function mouseClicked(){
 
 function doubleClicked(){
   if(!cubeLocked) return;
-  cubeSides[gameSelected].game.handleMouseClicked(scaleMouseX(),scaleMouseY());
+  cubeSides[gameSelected].game.handleDoubleClicked(scaleMouseX(),scaleMouseY());
 }
 
 function mousePressed(){
@@ -249,12 +249,12 @@ function mousePressed(){
 
 function mouseReleased() {
   if(!cubeLocked) return;
-  cubeSides[gameSelected].game.handleMouseReleased(scaleMouseX(), scaleMouseY());
+  cubeSides[gameSelected].game.handleMouseReleased(scaleMouseX(),scaleMouseY());
 }
 
 function mouseDragged() {
   if(!cubeLocked) return;
-  cubeSides[gameSelected].game.handleMouseDragged(scaleMouseX(), scaleMouseY());
+  cubeSides[gameSelected].game.handleMouseDragged(scaleMouseX(),scaleMouseY());
 }
 
 function keyPressed(){

@@ -39,12 +39,16 @@ function mouseClicked() {
     //console.log(mouseY);
 }
 
-function mouseDragged() {
-    puzzle.handleMouseDragged(scaleMouseX(), scaleMouseY());
+function mousePressed(){
+    puzzle.handleMousePressed(scaleMouseX(),scaleMouseY());
 }
 
 function mouseReleased() {
     puzzle.handleMouseReleased(scaleMouseX(), scaleMouseY());
+}
+
+function mouseDragged() {
+    puzzle.handleMouseDragged(scaleMouseX(), scaleMouseY());
 }
 
 function keyPressed(){

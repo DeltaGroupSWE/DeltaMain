@@ -52,10 +52,12 @@ class Puzzle {
     handleMouseClick(mx, my) {
         console.log('Handling puzzle\'s mouse event')
     }
+    handleDoubleClicked(mx,my){}
 
     handleMousePressed(mx, my){}
-    handleMouseDragged(mx, my){}
     handleMouseReleased(mx, my){}
+    handleMouseDragged(mx, my){}
+
 
     handleKeyPressed(key){}
     handleKeyReleased(key){}

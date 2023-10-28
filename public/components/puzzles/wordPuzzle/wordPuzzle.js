@@ -85,7 +85,7 @@ class WordPuzzle extends Puzzle {
 
     //TODO: use modular arithmetic to make the mouse position finding an O(1) operation instead of O(n)
     mouseOverWhichRectangle(mx, my){
-        for(var i = 0; i< puzzle.word.length; i++){
+        for(var i = 0; i< this.word.length; i++){
             if(mx > this.positionMap.get(i) - this.squareSize/2 && mx < this.positionMap.get(i) + this.squareSize/2  && my > this.originalPos[1] - this.squareSize/2 && my < this.originalPos[1] + this.squareSize/2){
                 return i;
             }
