@@ -40,25 +40,19 @@ function preload(){
   imgOff = loadImage('../../assets/sprites/lightoff.png');
   sOn = loadImage('../../assets/sprites/switchOn.png');
   sOff = loadImage('../../assets/sprites/switchOff.png');
-}
-/*
-function preload() {
+
   //buttonSound = loadSound('../../assets/sounds/button-beep.wav');
 }
-*/
 ///////////////////////////////////////////////////////////////////////////////
 function setup() {
   mCreateCanvas(windowWidth*0.8, windowHeight * 0.9, WEBGL);
   cnv.mouseClicked(selectFace);
   cnv.doubleClicked(selectGame);
   normalMaterial();
-
   eyeZ = ((height/2) / tan(PI/6));
   mCamera(0,0,eyeZ);
-
 	//mPage.show();
 	//mPage.style("display", "inline");
-
 ///////////////////////////////////////////////////////////////////////////////
 //Cube setup
   cubeScale = 1;
@@ -75,30 +69,36 @@ function setup() {
   cubeSides.push(new cubeFace(-l, 0, 0, 0,-HALF_PI,colorCodes[3],faceColors[3],id+30));  //left
   cubeSides.push(new cubeFace( 0,-l, 0, HALF_PI, 0,colorCodes[4],faceColors[4],id+40));  //top
   cubeSides.push(new cubeFace( 0, l, 0,-HALF_PI, 0,colorCodes[5],faceColors[5],id+50));  //bottom
-
 ///////////////////////////////////////////////////////////////////////////////
 //Cube autorotation vars
-TargetRotX = 0;
-TargetRotY = 0;
-autoRotate = false;
-cubeLocked = false; 
-gameSelected = -1;
-
+  TargetRotX = 0;
+  TargetRotY = 0;
+  autoRotate = false;
+  cubeLocked = false; 
+  gameSelected = -1;
 ///////////////////////////////////////////////////////////////////////////////
 //Game setup
 //
-cubeSides[0].setupFaceGame(new SliderPuzzle(cubeSides[0].gameBuffer,0));
-cubeSides[1].setupFaceGame(new WordPuzzle(cubeSides[1].gameBuffer,0));
-cubeSides[2].setupFaceGame(new flipSwitchGame(cubeSides[2].gameBuffer,0));
-cubeSides[4].setupFaceGame(new NumberPuzzle(cubeSides[4].gameBuffer,0));
-
+//TODO: randomize game order 
+//let gameList = [new SliderPuzzle(createGraphics(sideLength,sideLength),0)
+//               ,new WordPuzzle(createGraphics(sideLength,sideLength),0)
+//               ,new flipSwitchGame(createGraphics(sideLength,sideLength),0)
+//               ,new NumberPuzzle(createGraphics(sideLength,sideLength),0)]
+//for(let x in cubeSides){
+//  let i = random number from 0 - gameList.length;
+//  x.setupFaceGame(gamelist[i]);
+//  gameList.slice(i,1);
+//}
+  cubeSides[0].setupFaceGame(new SliderPuzzle(cubeSides[0].gameBuffer,0));
+  cubeSides[1].setupFaceGame(new WordPuzzle(cubeSides[1].gameBuffer,0));
+  cubeSides[2].setupFaceGame(new flipSwitchGame(cubeSides[2].gameBuffer,0));
+  cubeSides[4].setupFaceGame(new NumberPuzzle(cubeSides[4].gameBuffer,0));
 ///////////////////////////////////////////////////////////////////////////////
 //Timer
   timer = new Timer();
   timer.setupTimer();
   timer.startTimer();
   timerGraphic = createGraphics(200,100);
-
 ///////////////////////////////////////////////////////////////////////////////
 // Quit Game button
   quitButton = createButton("Quit");
@@ -112,15 +112,26 @@ cubeSides[4].setupFaceGame(new NumberPuzzle(cubeSides[4].gameBuffer,0));
     window.location.href = "../home/index.html";
   });
 //////////////////////////////////////////////////////////
-rotationDisplay = createGraphics(200,200);
-
+  //rotationDisplay = createGraphics(200,200);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 function draw() {
   mBackground(200);
+  calcRotation();
+  drawHUD();
+  mResetMatrix();
+  mRotateX(cubeRotX);
+  mRotateY(cubeRotY);
+  for(let x = 0; x < cubeSides.length; x+=1)
+  {
+    mPush();
+    cubeSides[x].drawFace();
+    mPop();
+  }
+}
 
-  //use mouse movement when pressed to drive rotation
+function calcRotation(){
   if(mouseIsPressed && !cubeLocked && !autoRotate){
     cubeRotY += (mouseX - pmouseX)*0.0025;
     cubeRotX += -(mouseY - pmouseY)*0.0025;
@@ -142,18 +153,9 @@ function draw() {
       cubeRotY = TargetRotY;
     }
   }
-
-  drawHUD();
-  mResetMatrix();
-  mRotateX(cubeRotX);
-  mRotateY(cubeRotY);
-  for(let x = 0; x < cubeSides.length; x+=1)
-  {
-    mPush();
-    cubeSides[x].drawFace();
-    mPop();
-  }
 }
+
+//TODO: game win animation
 
 ///////////////////////////////////////////////////////////////////////////////
 //HUD and HUD components
@@ -286,7 +288,7 @@ function selectFace(){ // listener for mouseClicked
   }
 }
 
-function selectGame(){ // listener for mouseDoubleClicked
+function selectGame(){ // listener for doubleClicked
   id = objectAtMouse();
   //console.log(id);
   for(let x = 0; x < cubeSides.length; x+=1){
@@ -348,6 +350,14 @@ class cubeFace{
     if(TargetRotY === PI && cubeRotY < 0) {TargetRotY = -PI;}
     autoRotate = true;
   }
-  
+
+/*  cubeComplete(){
+    for(let x in cubeSides){
+      if(!x.game.isSolved()) return false;
+    }
+    return true;
+
+  }
+  */
 }
 
