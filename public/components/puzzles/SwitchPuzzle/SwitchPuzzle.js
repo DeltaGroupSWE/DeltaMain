@@ -50,26 +50,64 @@ class flipSwitchGame extends Puzzle{
   constructor(renderer,difficulty=0){
     super(renderer, difficulty)
     let randomOnOff = [true, false];
-
+    let setupDone = false;
     let onOffArray = [];
+    let randomChange;
 
-    for(let i = 0; i < 5; ++i){
-      let counterFalse = 0; let counterTrue = 0;
-      onOffArray[i] = random(randomOnOff);
-      for(let j = 0; j < onOffArray.length; ++j){
-        if(onOffArray[j] == true) {++counterTrue;}
-        else{++counterFalse;}
+    //determines random switch states with at least 1 as on or off
+    while(setupDone == false){
+      for(let i = 0; i < 5; ++i){
+        onOffArray[i] = random(randomOnOff);
       }
-      if((counterTrue > 0 && counterFalse == 0) || (counterTrue == 0 && counterTrue > 0)){
-        if(onOffArray[i] == true){onOffArray[i] = false;}
-        else{onOffArray[i] = true;}
+      //ugly but simple implementation. Made to make sure the game cannot be won in one move
+      if(onOffArray[0] == true && onOffArray[1] == true && onOffArray[2] == true && onOffArray[3] == true && onOffArray[4] == true){
+        randomChange = random([0,1,2,3,4]); //temp
+        onOffArray[randomChange] = false;
+        console.log("Changed on-on-on-on-on");
+      }
+      else if(onOffArray[0] == false && onOffArray[1] == false && onOffArray[2] == false && onOffArray[3] == false && onOffArray[4] == false){
+        randomChange = random([0,1,2,3,4]); //temp
+        onOffArray[randomChange] = true;
+        console.log("Changed off-off-off-off-off");
+      }
+      else if(onOffArray[0] == true && onOffArray[1] == true && onOffArray[2] == false && onOffArray[3] == false && onOffArray[4] == false){
+        randomChange = random([2,3,4]); //temp
+        onOffArray[randomChange] = true;
+        console.log("Changed on-on-off-off-off");
+      }
+      else if(onOffArray[0] == true && onOffArray[1] == false && onOffArray[2] == false && onOffArray[3] == false && onOffArray[4] == true){
+        randomChange = random([1,2,3]); //temp
+        onOffArray[randomChange] = true;
+        console.log("Changed om-off-off-off-on");
+      }
+      else if(onOffArray[0] == false && onOffArray[1] == false && onOffArray[2] == false && onOffArray[3] == true && onOffArray[4] == true){
+        randomChange = random([0,1,2]); //temp
+        onOffArray[randomChange] = true;
+        console.log("Changed off-off-off-on-on");
+      }
+      else if(onOffArray[0] == false && onOffArray[1] == false && onOffArray[2] == true && onOffArray[3] == true && onOffArray[4] == false){
+        randomChange = random([0,1,4]); //temp
+        onOffArray[randomChange] = true;
+        console.log("Changed off-off-off-on-on");
+      }
+      else if(onOffArray[0] == false && onOffArray[1] == true && onOffArray[2] == true && onOffArray[3] == false && onOffArray[4] == false){
+        randomChange = random([0,3,4]); //temp
+        onOffArray[randomChange] = true;
+        console.log("Changed off-off-off-on-on");
+      }
+      else{
+        console.log("Changed Nothing");
+        setupDone = true;
       }
     }
-
+    
+    /*
+    
+    */
     this.sw1 = new flipSwitch(onOffArray[0], (this.renderer.width *0.05), this.renderer.height*0.2, this.renderer.width);
-    this.sw2 = new flipSwitch(onOffArray[1],  (this.renderer.width *0.25), this.renderer.height*0.2, this.renderer.width);
+    this.sw2 = new flipSwitch(onOffArray[1], (this.renderer.width *0.25), this.renderer.height*0.2, this.renderer.width);
     this.sw3 = new flipSwitch(onOffArray[2], (this.renderer.width *0.45), this.renderer.height*0.2, this.renderer.width);
-    this.sw4 = new flipSwitch(onOffArray[3],  (this.renderer.width *0.65), this.renderer.height*0.2, this.renderer.width);
+    this.sw4 = new flipSwitch(onOffArray[3], (this.renderer.width *0.65), this.renderer.height*0.2, this.renderer.width);
     this.sw5 = new flipSwitch(onOffArray[4], (this.renderer.width *0.85), this.renderer.height*0.2, this.renderer.width);
 
     this.gameOver = false;
