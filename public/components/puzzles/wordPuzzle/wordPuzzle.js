@@ -28,55 +28,60 @@ class WordPuzzle extends Puzzle {
         this.word = this.lCaseWord.toLocaleUpperCase()
         this.wordMap = new Map()
         this.positionMap = new Map()
-        this.squareSize = Math.floor(0.7*this.renderer.width/this.word.length)
-        this.padding = Math.floor(0.1*this.renderer.width/this.word.length)
-        this.originalPos = [Math.floor(0.1*this.renderer.width) + this.squareSize/2, Math.floor(0.5*this.renderer.height)]
+        this.squareSize = Math.floor(0.7 * this.renderer.width / this.word.length)
+        this.padding = Math.floor(0.1 * this.renderer.width / this.word.length)
+        this.originalPos = [Math.floor(0.1 * this.renderer.width) + this.squareSize / 2, Math.floor(0.5 * this.renderer.height)]
         this.mouseTarget = -1
         var remaining = new Set()
 
-        for(var i = 0; i< this.word.length; i++){
+        for (var i = 0; i < this.word.length; i++) {
             remaining.add(i)
         }
-
-        for(var i = 0; i< this.word.length; i++){
+        for (var i = 0; i < this.word.length; i++) {
             var ind = getRandomElementFromSet(remaining)
             this.wordMap.set(i, this.word[ind])
-            this.positionMap.set(i, this.originalPos[0] + i*(this.squareSize + this.padding))
+            this.positionMap.set(i, this.originalPos[0] + i * (this.squareSize + this.padding))
 
             remaining.delete(ind)
+        }
+
+        //set up game again if word is solved
+        if (this.isSolved()) {
+            console.log(this.word + ": Already solved. Rescrambling...")
+            this.setupGame();
         }
     }
 
     drawGame() {
         this.renderer.rectMode(CENTER);
-        for(var i = 0; i< this.word.length; i++){
+        for (var i = 0; i < this.word.length; i++) {
             // fill(244, 122, 158);
             //drawingContext = this.renderer.drawingContext;
             this.renderer.rect(this.positionMap.get(i), this.originalPos[1], this.squareSize, this.squareSize, 10)
             this.renderer.textAlign(CENTER);
             this.renderer.textSize(25);
-            this.renderer.text(this.wordMap.get(i), this.positionMap.get(i) , this.originalPos[1])
+            this.renderer.text(this.wordMap.get(i), this.positionMap.get(i), this.originalPos[1])
         }
 
         //diplay hint at the bottom center if displayHint, else clickable button to toggle
-        if (this.displayHint){
+        if (this.displayHint) {
             this.renderer.textAlign(CENTER);
             this.renderer.textSize(25);
-            this.renderer.text(this.hint, this.renderer.width/2 , this.renderer.height - 50)
+            this.renderer.text(this.hint, this.renderer.width / 2, this.renderer.height - 50)
         }
-        else{
+        else {
             //drawingContext = this.renderer.drawingContext;
-            this.renderer.rect(this.renderer.width/2, this.renderer.height - 50, 150, 50, 10)
+            this.renderer.rect(this.renderer.width / 2, this.renderer.height - 50, 150, 50, 10)
             this.renderer.textAlign(CENTER);
             this.renderer.textSize(25);
-            this.renderer.text('Hint?', this.renderer.width/2 , this.renderer.height - 50)
+            this.renderer.text('Hint?', this.renderer.width / 2, this.renderer.height - 50)
         }
     }
 
     //Looping inversely because people will tend to solve the puzzle from the left to the right. so error checking will be faster
     isSolved() {
-        for(var i = this.word.length - 1; i > -1 ; i--){
-            if(this.wordMap.get(i) != this.word[i]){
+        for (var i = this.word.length - 1; i > -1; i--) {
+            if (this.wordMap.get(i) != this.word[i]) {
                 return false
             }
         }
@@ -84,9 +89,9 @@ class WordPuzzle extends Puzzle {
     }
 
     //TODO: use modular arithmetic to make the mouse position finding an O(1) operation instead of O(n)
-    mouseOverWhichRectangle(mx, my){
-        for(var i = 0; i< this.word.length; i++){
-            if(mx > this.positionMap.get(i) - this.squareSize/2 && mx < this.positionMap.get(i) + this.squareSize/2  && my > this.originalPos[1] - this.squareSize/2 && my < this.originalPos[1] + this.squareSize/2){
+    mouseOverWhichRectangle(mx, my) {
+        for (var i = 0; i < this.word.length; i++) {
+            if (mx > this.positionMap.get(i) - this.squareSize / 2 && mx < this.positionMap.get(i) + this.squareSize / 2 && my > this.originalPos[1] - this.squareSize / 2 && my < this.originalPos[1] + this.squareSize / 2) {
                 return i;
             }
         }
@@ -97,43 +102,43 @@ class WordPuzzle extends Puzzle {
         this.mouseTarget = target;
     }
 
-    handleMousePressed(mx, my){
+    handleMousePressed(mx, my) {
         this.setMouseTarget(this.mouseOverWhichRectangle(mx, my));
-        if (!this.displayHint && mx > this.renderer.width/2 - 75 && mx < this.renderer.width/2 + 75 && my > this.renderer.height - 75 && my < this.renderer.height - 25){
+        if (!this.displayHint && mx > this.renderer.width / 2 - 75 && mx < this.renderer.width / 2 + 75 && my > this.renderer.height - 75 && my < this.renderer.height - 25) {
             this.displayHint = true
         }
     }
 
-    handleMouseReleased(mx, my){
-        this.positionMap.set(this.mouseTarget, this.originalPos[0] + (this.mouseTarget)*(this.squareSize + this.padding))
+    handleMouseReleased(mx, my) {
+        this.positionMap.set(this.mouseTarget, this.originalPos[0] + (this.mouseTarget) * (this.squareSize + this.padding))
         this.mouseTarget = -1
-        if(this.isSolved()){
+        if (this.isSolved()) {
             this.difficulty++;
             this.setupGame();
         }
     }
 
-    handleMouseDragged(mx, my){
-        if(this.mouseTarget != -1){
-    
-            if ( this.mouseTarget > 0 && mx < this.positionMap.get(this.mouseTarget - 1)){
+    handleMouseDragged(mx, my) {
+        if (this.mouseTarget != -1) {
+
+            if (this.mouseTarget > 0 && mx < this.positionMap.get(this.mouseTarget - 1)) {
                 // shuffleSound.play();
                 this.tmp = this.wordMap.get(this.mouseTarget - 1)
                 this.wordMap.set(this.mouseTarget - 1, this.wordMap.get(this.mouseTarget))
                 this.wordMap.set(this.mouseTarget, this.tmp)
-                this.positionMap.set(this.mouseTarget, this.originalPos[0] + (this.mouseTarget)*(this.squareSize + this.padding))
+                this.positionMap.set(this.mouseTarget, this.originalPos[0] + (this.mouseTarget) * (this.squareSize + this.padding))
                 this.mouseTarget = this.mouseTarget - 1
             }
-            else if ( this.mouseTarget < this.word.length - 1 && mx > this.positionMap.get(this.mouseTarget + 1)){
+            else if (this.mouseTarget < this.word.length - 1 && mx > this.positionMap.get(this.mouseTarget + 1)) {
                 // shuffleSound.play();
                 this.tmp = this.wordMap.get(this.mouseTarget + 1)
                 this.wordMap.set(this.mouseTarget + 1, this.wordMap.get(this.mouseTarget))
                 this.wordMap.set(this.mouseTarget, this.tmp)
-                this.positionMap.set(this.mouseTarget, this.originalPos[0] + (this.mouseTarget)*(this.squareSize + this.padding))
+                this.positionMap.set(this.mouseTarget, this.originalPos[0] + (this.mouseTarget) * (this.squareSize + this.padding))
                 this.mouseTarget = this.mouseTarget + 1
             }
-    
-            if (mx > this.originalPos[0] && mx < this.originalPos[0] + this.word.length*(this.squareSize + this.padding)){
+
+            if (mx > this.originalPos[0] && mx < this.originalPos[0] + this.word.length * (this.squareSize + this.padding)) {
                 this.positionMap.set(this.mouseTarget, mx)
             }
         }
@@ -158,6 +163,6 @@ function parseHintsCSV(data) {
         const [word, hint] = rows[i].split(",");
         hints[word] = hint;
     }
-    
+
     return hints;
 }
