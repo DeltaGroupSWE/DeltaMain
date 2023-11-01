@@ -29,10 +29,10 @@ class NumberIcon{
         this.isDragging = true;
         }
     }
-    iconDragged(){
+    iconDragged(mx,my){
         if (this.isDragging) {
-            this.x = mouseX;
-            this.y = mouseY;
+            this.x = mx;
+            this.y = my;
         }
     }
 
@@ -40,8 +40,8 @@ class NumberIcon{
         this.isDragging = false;
     }
     
-    isInIcon(){
-        return dist(mouseX, mouseY, this.x,this.y) < this.radius / 2;
+    isInIcon(mx,my){
+        return dist(mx, my, this.x,this.y) < this.radius / 2;
     };
 
 
@@ -87,7 +87,7 @@ class Container{
 
     }
     drawContainer(rndr){
-            fill(1,200,100);
+            rndr.fill(1,200,100);
             strokeWeight(5);
             circle(this.xPos,this.yPos, this.height);
             fill(255); 
@@ -106,6 +106,7 @@ class BloodSugarGame extends Puzzle {
         super(renderer, difficulty);
         this.gamestate = false;
         this.w = this.renderer.width;
+        this.h = this.renderer.height;
         
         this.icons = []; //places NumberIcon objects into a array
         this.iconValuealueArray=[12,14,16,10]; //the values for each NumberIcon Object
@@ -212,12 +213,12 @@ class BloodSugarGame extends Puzzle {
 
     handleMousePressed(mx, my){
         for(let icon of this.icons){
-            icon.iconPressed();
+            icon.iconPressed(mx,my);
         }
     }
     handleMouseDragged(mx, my){
         for (let icon of this.icons) {
-            icon.iconDragged();
+            icon.iconDragged(mx,my);
         }
     }
     handleMouseReleased(mx, my){

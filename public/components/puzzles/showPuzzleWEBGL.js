@@ -3,6 +3,8 @@ let renderer;
 let sideLength;
 let z;
 
+function preload(){
+}
 
 function setup() {
     let side = windowHeight*.9;
