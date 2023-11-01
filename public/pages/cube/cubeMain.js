@@ -142,7 +142,7 @@ function calcRotation(){
   if(cubeRotX < -PI) cubeRotX += TWO_PI;
   if(autoRotate){
     //if(sign(TargetRotX)!= sign(cubeRotX)) 
-    let easing = .15;
+    let easing = .25;
     let drx = TargetRotX - cubeRotX;
     let dry = TargetRotY - cubeRotY;
     cubeRotX += drx * easing;
