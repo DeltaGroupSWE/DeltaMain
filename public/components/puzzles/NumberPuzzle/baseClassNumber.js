@@ -59,7 +59,7 @@ class NumberPuzzle extends Puzzle {
     // Everything that the puzzle needs to do to display on the screen should happen here.
     drawGame() {
 
-        console.log('Displaying the puzzle')
+        //console.log('Displaying the puzzle')
         //just like you original setup()
         //this will be called on each game object in the main game's draw funtion
         //when adding something to the renderer do it like this

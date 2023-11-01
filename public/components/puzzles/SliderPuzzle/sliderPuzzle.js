@@ -4,7 +4,7 @@ class SliderPuzzle extends Puzzle {
         super(renderer, difficulty)
         this.w = renderer.width;
 
-        console.log('Constructing the puzzle');
+        //console.log('Constructing the puzzle');
         this.puzzleState = {
             A1: "A1",//             ----  ----  ----
             B1: "B1",//            | A1 || B1 || C1 |
@@ -42,7 +42,7 @@ class SliderPuzzle extends Puzzle {
             this.renderer.fill(200);
             this.renderer.rect(x, y, this.boxSize, this.boxSize);
             this.renderer.fill(0);
-            this.renderer.textSize(this.boxSize/2);
+            this.renderer.textSize(this.boxSize / 2);
             this.renderer.textAlign(CENTER, CENTER);
             this.renderer.text(content, x + this.boxSize / 2, y + this.boxSize / 2);
             x += this.boxSize + this.spacing;
