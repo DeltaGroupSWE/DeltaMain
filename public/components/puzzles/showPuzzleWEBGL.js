@@ -1,4 +1,4 @@
-let puzzle;
+let game;
 let renderer;
 let sideLength;
 let z;
@@ -11,8 +11,8 @@ function setup() {
     createCamera(0,0, z);
     sideLength = side/2;
     renderer = createGraphics(sideLength,sideLength);
-    puzzle = new WordPuzzle(renderer, 0);
-    puzzle.setupGame();
+    game = new BloodSugarGame(renderer, 0);
+    game.setupGame();
 }
 
 function draw() {
@@ -26,7 +26,7 @@ function draw() {
     renderer.clear();
     renderer.background(150);
     renderer.circle(scaleMouseX(),scaleMouseY(),10);
-    puzzle.drawGame();
+    game.drawGame();
     noStroke();
     texture(renderer);
     plane(sideLength, sideLength);
@@ -34,25 +34,25 @@ function draw() {
 }
 
 function mouseClicked() {
-    puzzle.handleMousePressed(scaleMouseX(), scaleMouseY());
+    game.handleMousePressed(scaleMouseX(), scaleMouseY());
     //console.log(mouseX);
     //console.log(mouseY);
 }
 
 function mousePressed(){
-    puzzle.handleMousePressed(scaleMouseX(),scaleMouseY());
+    game.handleMousePressed(scaleMouseX(),scaleMouseY());
 }
 
 function mouseReleased() {
-    puzzle.handleMouseReleased(scaleMouseX(), scaleMouseY());
+    game.handleMouseReleased(scaleMouseX(), scaleMouseY());
 }
 
 function mouseDragged() {
-    puzzle.handleMouseDragged(scaleMouseX(), scaleMouseY());
+    game.handleMouseDragged(scaleMouseX(), scaleMouseY());
 }
 
 function keyPressed(){
-    puzzle.handleKeyPressed(keyCode);
+    game.handleKeyPressed(keyCode);
 }
 
 function scaleMouseX(){

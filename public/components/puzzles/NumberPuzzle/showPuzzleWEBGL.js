@@ -1,4 +1,4 @@
-let puzzle;
+let game;
 let renderer;
 let sideLength;
 let z;
@@ -11,8 +11,8 @@ function setup() {
     sideLength = 1000;
     renderer = createGraphics(sideLength,sideLength);
     
-    puzzle = new NumberPuzzle(renderer, 0);
-    puzzle.setupGame();
+    game = new Numbergame(renderer, 0);
+    game.setupGame();
 }
 
 function draw() {
@@ -32,11 +32,11 @@ function draw() {
 
 
     push();
-    puzzle.renderer.clear();
+    game.renderer.clear();
     
-    puzzle.renderer.background(150);
+    game.renderer.background(150);
     
-    puzzle.drawGame();
+    game.drawGame();
     
     noStroke();
     texture(renderer);
@@ -46,15 +46,15 @@ function draw() {
 }
 
 function mouseClicked() {
-    puzzle.handleMousePressed(scaleMouseX(), scaleMouseY());
+    game.handleMousePressed(scaleMouseX(), scaleMouseY());
 }
 
 function mouseDragged() {
-    puzzle.handleMouseDragged(scaleMouseX(), scaleMouseY());
+    game.handleMouseDragged(scaleMouseX(), scaleMouseY());
 }
 
 function mouseReleased() {
-    puzzle.handleMouseReleased(scaleMouseX(), scaleMouseY());
+    game.handleMouseReleased(scaleMouseX(), scaleMouseY());
 }
 
 function scaleMouseX(){
