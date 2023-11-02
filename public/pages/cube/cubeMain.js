@@ -15,6 +15,7 @@ let timerGraphic;
 
 //HUD and mouse scaling
 let eyeZ;
+let displayInstructions;
 
 //auto rotation
 let TargetRotX;
@@ -97,8 +98,10 @@ function setup() {
 //Timer
   timer = new Timer();
   timer.setupTimer();
-  timer.startTimer();
+  //timer.startTimer();
   timerGraphic = createGraphics(200,100);
+
+  displayInstructions = true;
 ///////////////////////////////////////////////////////////////////////////////
 // Quit Game button
   quitButton = createButton("Quit");
@@ -153,6 +156,7 @@ function calcRotation(){
       cubeRotY = TargetRotY;
     }
   }
+  drawHUD();
 }
 
 //TODO: game win animation
@@ -174,6 +178,7 @@ function drawHUD(){
   */
  drawTimerHUD(screenPlane);
  //drawRotationDisplay(screenPlane);
+ if(displayInstructions) instructionWindow(screenPlane);
 
 }
 
@@ -223,6 +228,43 @@ function drawRotationDisplay(p){
   rotationDisplay.clear();
 }
 
+function instructionWindow(p){
+  noLoop();
+  let instructionWindow = createGraphics(width/2, height/2)
+  let urw = instructionWindow.width;   //2*height/10;
+  let urh = instructionWindow.height; //height/10;
+  let urx = (width/2) - urw;
+  let ury = (height/2 ) - urh;
+  instructionWindow.background(255);
+  //timerGraphic.background(0);
+  instructionWindow.textSize(instructionWindow.height/20);
+  instructionWindow.textAlign(CENTER,CENTER);
+  instructionWindow.stroke(0)
+  instructionWindow.strokeWeight(1);
+  let introText1 = "Instructions\n";
+  let introText2 = "Use the mouse to rotate around the cube\n" +
+  "Click on a face to jump to it\n" +
+  "Double Click on the face to play the game\n" +
+  "Double Click off the cube to stop playing\n" +
+  "When the boarder is green you can't move the cube but you can play the game\n" +
+  "\nPress any key to continue...";
+  instructionWindow.rectMode(CENTER,CENTER);
+  instructionWindow.textSize(instructionWindow.height/10);
+  instructionWindow.text(introText1, urw/2,urh*0.2, urw*0.8,urh*0.8);
+  instructionWindow.textSize(instructionWindow.height/20);
+  instructionWindow.text(introText2, urw/2,urh*0.5, urw*0.8,urh*0.8);
+  instructionWindow.strokeWeight(10);
+  instructionWindow.noFill();
+  instructionWindow.rect(urw/2,urh/2,urw,urh);
+
+  push();
+  translate(urx/10,ury/10,p);
+  texture(instructionWindow);
+  plane(urw/10,urh/10);
+  pop();
+  instructionWindow.clear();
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //Events
 function windowResized(){
@@ -260,6 +302,11 @@ function mouseDragged() {
 }
 
 function keyPressed(){
+  if(displayInstructions){
+    displayInstructions = false;
+    loop();
+    timer.startTimer();
+  }
   if(!cubeLocked) return;
   cubeSides[gameSelected].game.handleKeyPressed(keyCode);
 }
@@ -303,6 +350,16 @@ function selectGame(){ // listener for doubleClicked
   gameSelected = -1;
 }
 
+
+/* function cubeComplete(){
+  for(let x in cubeSides){
+    if(!x.game.isSolved()) return false;
+  }
+  return true;
+
+}
+*/
+
 ///////////////////////////////////////////////////////////////////////////////
 //CubeFace class
 //Contains Graphics object and Puzzle Object as members
@@ -338,6 +395,14 @@ class cubeFace{
     mTranslate(this.tx*sideLength/2,this.ty*sideLength/2,this.tz*sideLength/2);
     mRotate(this.rx,createVector(1,0,0));
     mRotate(this.ry,createVector(0,1,0));
+    this.gameBuffer.push();
+      this.gameBuffer.stroke(255);
+      if(cubeLocked)this.gameBuffer.stroke("green");
+      this.gameBuffer.strokeWeight(8);
+      this.gameBuffer.noFill();
+      this.gameBuffer.rectMode(CORNER);
+      this.gameBuffer.rect(0,0,this.gameBuffer.width,this.gameBuffer.height);
+    this.gameBuffer.pop();
     mTexture(this.gameBuffer);
     mPlane(this.id,sideLength);
   }
@@ -351,13 +416,5 @@ class cubeFace{
     autoRotate = true;
   }
 
-/*  cubeComplete(){
-    for(let x in cubeSides){
-      if(!x.game.isSolved()) return false;
-    }
-    return true;
-
-  }
-  */
 }
 
