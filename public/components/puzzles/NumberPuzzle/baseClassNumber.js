@@ -22,6 +22,7 @@ class NumberPuzzle extends Puzzle {
         this.previousGuess = '';
         this.inputValueLength = 0;
         this.maxInputValue = 100;
+        this.gameSolved = false;
 
         console.log('Constructing the puzzle');
         //...//game specific stuff
@@ -127,12 +128,17 @@ class NumberPuzzle extends Puzzle {
     // Should return true if the puzzle is solved, or false if it isn't
 
     isSolved() {
+        return this.gameSolved;
+    }
+
+    checkNum() {
         //checking that the parsed integer value is less than the maxInputValue before dropping into the isSolved logic
         if (parseInt(this.inputValue) <= this.maxInputValue) {
             if (parseInt(this.inputValue) == this.randomNum) {
                 this.inputValue = '';
                 this.titleText = 'You got it!';
                 console.log('solved');
+                this.gameSolved=true;
             }
             else if (parseInt(this.inputValue) > this.randomNum) {
                 this.inputValue = '';
@@ -191,7 +197,7 @@ class NumberPuzzle extends Puzzle {
         if (key == 'enter') {
             this.guessCount += 1;
             this.previousGuess = this.inputValue;
-            this.isSolved();
+            this.checkNum();
             this.inputValueLength = 0;
         }
         //checking that the input value length is only 3 integers

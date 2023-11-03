@@ -33,6 +33,9 @@ let imgOn;
 let imgOff;
 let sOn;
 let sOff;
+let greg;
+let gregHappy;
+let gregSad;
 function preload(){
   switchflipping = loadSound("../../assets/sounds/switchflip.wav");
   switchgamelose = loadSound('../../assets/sounds/switchgamelose.wav');
@@ -41,6 +44,10 @@ function preload(){
   imgOff = loadImage('../../assets/sprites/lightoff.png');
   sOn = loadImage('../../assets/sprites/switchOn.png');
   sOff = loadImage('../../assets/sprites/switchOff.png');
+
+  greg = loadImage('../../assets/sprites/bloodsugar-monitor-images/greg.png');
+  gregHappy = loadImage('../../assets/sprites/bloodsugar-monitor-images/greghappy.png');
+  gregSad = loadImage('../../assets/sprites/bloodsugar-monitor-images/gregsad.png');
 
   //buttonSound = loadSound('../../assets/sounds/button-beep.wav');
 }
@@ -389,6 +396,12 @@ class cubeFace{
   drawFace(){
     this.gameBuffer.clear();
     this.gameBuffer.background(this.col);
+    /*
+    if(this.game != null)
+      if(!this.game.isSolved()) this.gameBuffer.image(gregSad,0,0,this.gameBuffer.width,this.gameBuffer.height);
+      else this.gameBuffer.image(gregHappy,0,0,this.gameBuffer.width,this.gameBuffer.height);
+    else this.gameBuffer.image(greg,0,0,this.gameBuffer.width,this.gameBuffer.height);
+    */
     if(this.game != null) this.game.drawGame();
     //this.gameBuffer.circle(scaleMouseX(),scaleMouseY(),10);
 
