@@ -55,13 +55,9 @@ class resetSwitch{
     this.h = w/5;
   }
 
-  resetGame(){
-    this.flipped = true;
-    console.log("Reset able to be clicked");
-  }
-
   drawResetSwitch(renderer){
-    renderer.text("Reset Game", this.x, this.y)
+    renderer.fill("black");
+    renderer.text("Reset Game", (this.x + (this.x + this.w)) / 2, this.y)
     renderer.image(sOff, this.x, this.y, this.w, this.h);
   }
 }
@@ -73,6 +69,7 @@ class flipSwitchGame extends Puzzle{
     let setupDone = false;
     let onOffArray = [];
     let randomChange;
+    this.randomCounter = 0;
 
     //determines random switch states with at least 1 as on or off
     while(setupDone == false){
@@ -120,7 +117,6 @@ class flipSwitchGame extends Puzzle{
         setupDone = true;
       }
     }
-    
     this.sw1 = new flipSwitch(onOffArray[0], (this.renderer.width *0.05), this.renderer.height*0.2, this.renderer.width);
     this.sw2 = new flipSwitch(onOffArray[1], (this.renderer.width *0.25), this.renderer.height*0.2, this.renderer.width);
     this.sw3 = new flipSwitch(onOffArray[2], (this.renderer.width *0.45), this.renderer.height*0.2, this.renderer.width);
@@ -132,7 +128,7 @@ class flipSwitchGame extends Puzzle{
   }
 
   setupGame(){
-
+    
   }
 
   drawGame() {  
@@ -177,8 +173,14 @@ class flipSwitchGame extends Puzzle{
       else if(mx > this.sw4.x && mx < this.sw4.x + this.sw4.w && my > this.sw4.y && my < this.sw4.y + this.sw2.h){this.sw3.flip(); this.sw4.flip(); this.sw5.flip();}
       else if(mx > this.sw5.x && mx < this.sw5.x + this.sw5.w && my > this.sw5.y && my < this.sw5.y + this.sw2.h){this.sw4.flip(); this.sw5.flip(); this.sw1.flip();}
     }
-    if(mx > this.resetSwitchGame.x && mx < this.resetSwitchGame.x + this.resetSwitchGame.w && mx > this.resetSwitchGame.y && mx < this.resetSwitchGame.y +this.resetSwitchGame.h){
-      this.resetSwitchGame.resetGame();
+    else if(this.winLoss == -1){
+      if(mx > this.resetSwitchGame.x && mx < this.resetSwitchGame.x + this.resetSwitchGame.w && my > this.resetSwitchGame.y && my < this.resetSwitchGame.y + this.resetSwitchGame.h){
+        this.resetGameState();
+        //console.log("reseting game state");
+      }
+    }
+    else{
+      //console.log("Clicked on something else");
     }
   }
 
@@ -199,13 +201,61 @@ class flipSwitchGame extends Puzzle{
       this.renderer.text('You win', this.renderer.width/2, this.renderer.height/1.25);
     }
     else{
-      this.gameOver = false;
+      this.winLoss = 0;
     }
-
   }
 
   resetGameState(){
-    
+    console.log("entering reset game state");
+    let randomOnOff = [true, false];
+    let setupDone = false;
+    let onOffArray = [];
+    let randomChange;
+
+    if(setupDone == false){
+      randomSeed(this.randomCounter);
+      ++this.randomCounter;
+      for(let i = 0; i < 5; ++i){
+        onOffArray[i] = random(randomOnOff);
+      }
+      //ugly but simple implementation. Made to make sure the game cannot be won in one move
+      if(this.isSolved() == true && this.winLoss == 1){
+        randomChange = random([0,1,2,3,4]); //temp
+        onOffArray[randomChange] = false;
+      }
+      else if(this.isSolved() == true && this.winLoss == -1){
+        randomChange = random([0,1,2,3,4]); //temp
+        onOffArray[randomChange] = true;
+      }
+      else if(onOffArray[0] == true && onOffArray[1] == true && onOffArray[2] == false && onOffArray[3] == false && onOffArray[4] == false){
+        randomChange = random([2,3,4]); //temp
+        onOffArray[randomChange] = true;
+      }
+      else if(onOffArray[0] == true && onOffArray[1] == false && onOffArray[2] == false && onOffArray[3] == false && onOffArray[4] == true){
+        randomChange = random([1,2,3]); //temp
+        onOffArray[randomChange] = true;
+      }
+      else if(onOffArray[0] == false && onOffArray[1] == false && onOffArray[2] == false && onOffArray[3] == true && onOffArray[4] == true){
+        randomChange = random([0,1,2]); //temp
+        onOffArray[randomChange] = true;
+      }
+      else if(onOffArray[0] == false && onOffArray[1] == false && onOffArray[2] == true && onOffArray[3] == true && onOffArray[4] == false){
+        randomChange = random([0,1,4]); //temp
+        onOffArray[randomChange] = true;
+      }
+      else if(onOffArray[0] == false && onOffArray[1] == true && onOffArray[2] == true && onOffArray[3] == false && onOffArray[4] == false){
+        randomChange = random([0,3,4]); //temp
+        onOffArray[randomChange] = true;
+      }
+      else{setupDone = true;}
+    }
+    //console.log(this.randomCounter);
+    this.sw1.onOff = onOffArray[0];
+    this.sw2.onOff = onOffArray[1];
+    this.sw3.onOff = onOffArray[2];
+    this.sw4.onOff = onOffArray[3];
+    this.sw5.onOff = onOffArray[4];
+    this.winLoss = 0;
   }
 
   gameInstructions(){
@@ -217,6 +267,3 @@ class flipSwitchGame extends Puzzle{
     this.renderer.text("Flipping a switch flips itself and the ones next to it, flip all 5 to yellow to win!", this.renderer.width/2, 50);
   }
 }
-
-
-
