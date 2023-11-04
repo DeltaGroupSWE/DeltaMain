@@ -18,6 +18,7 @@ fetch('../../assets/csvs/hints.csv')  // Adjust the path accordingly
 class WordPuzzle extends Puzzle {
     constructor(renderer, difficulty = 0) {
         super(renderer, difficulty)
+        this.wordsComplete = 0;
     }
 
     setupGame() {
@@ -34,6 +35,7 @@ class WordPuzzle extends Puzzle {
         this.mouseTarget = -1
         var remaining = new Set()
 
+
         for (var i = 0; i < this.word.length; i++) {
             remaining.add(i)
         }
@@ -46,13 +48,19 @@ class WordPuzzle extends Puzzle {
         }
 
         //set up game again if word is solved
-        if (this.isSolved()) {
+        if (this.wordComplete()) {
             console.log(this.word + ": Already solved. Rescrambling...")
             this.setupGame();
         }
     }
 
     drawGame() {
+        if(this.wordsComplete >= 5){
+            this.renderer.textAlign(CENTER);
+            this.renderer.textSize(25);
+            this.renderer.text("complete", this.renderer.width / 2, this.renderer.height/2)
+            return;
+        }
         this.renderer.rectMode(CENTER);
         for (var i = 0; i < this.word.length; i++) {
             // fill(244, 122, 158);
@@ -78,14 +86,20 @@ class WordPuzzle extends Puzzle {
         }
     }
 
+    isSolved(){
+        if(this.wordsComplete < 5) return false;
+        return true;
+    }
     //Looping inversely because people will tend to solve the puzzle from the left to the right. so error checking will be faster
-    isSolved() {
+    wordComplete() {
         for (var i = this.word.length - 1; i > -1; i--) {
             if (this.wordMap.get(i) != this.word[i]) {
                 return false
             }
         }
-        return true
+        this.wordsComplete++;
+        console.log(this.wordsComplete);
+        return true;
     }
 
     //TODO: use modular arithmetic to make the mouse position finding an O(1) operation instead of O(n)
@@ -103,6 +117,7 @@ class WordPuzzle extends Puzzle {
     }
 
     handleMousePressed(mx, my) {
+        if(this.wordsComplete >= 5) return;
         this.setMouseTarget(this.mouseOverWhichRectangle(mx, my));
         if (!this.displayHint && mx > this.renderer.width / 2 - 75 && mx < this.renderer.width / 2 + 75 && my > this.renderer.height - 75 && my < this.renderer.height - 25) {
             this.displayHint = true
@@ -110,17 +125,18 @@ class WordPuzzle extends Puzzle {
     }
 
     handleMouseReleased(mx, my) {
+        if(this.wordsComplete >= 5) return;
         this.positionMap.set(this.mouseTarget, this.originalPos[0] + (this.mouseTarget) * (this.squareSize + this.padding))
         this.mouseTarget = -1
-        if (this.isSolved()) {
+        if (this.wordComplete() && this.wordsComplete < 5) {
             this.difficulty++;
             this.setupGame();
         }
     }
 
     handleMouseDragged(mx, my) {
+        if(this.wordsComplete >= 5) return;
         if (this.mouseTarget != -1) {
-
             if (this.mouseTarget > 0 && mx < this.positionMap.get(this.mouseTarget - 1)) {
                 // shuffleSound.play();
                 this.tmp = this.wordMap.get(this.mouseTarget - 1)
