@@ -294,6 +294,7 @@ function mousePressed(){
     pressed_id = objectAtMouse();
     pressed_rotX = cubeRotX;
     pressed_rotY = cubeRotY;
+    return;
   }
   cubeSides[gameSelected].game.handleMousePressed(scaleMouseX(),scaleMouseY());
 }
@@ -309,17 +310,17 @@ function mouseReleased() {
         if(cubeSides[x].id === released_id) cubeSides[x].goToFace();
       }
     }
+    return;
   }
   cubeSides[gameSelected].game.handleMouseReleased(scaleMouseX(),scaleMouseY());
 }
 
 function mouseDragged() {
-  if(!cubeLocked) {
-    if(!cubeLocked && !autoRotate){
-      cubeRotY += (mouseX - pmouseX)*0.0025;
-      cubeRotX += -(mouseY - pmouseY)*0.0025;
-    }
-  };
+  if(!cubeLocked && !autoRotate) {
+    cubeRotY += (mouseX - pmouseX)*0.0025;
+    cubeRotX += -(mouseY - pmouseY)*0.0025;
+    return;
+  }
   cubeSides[gameSelected].game.handleMouseDragged(scaleMouseX(),scaleMouseY());
 }
 
@@ -426,7 +427,7 @@ class cubeFace{
     mRotate(this.ry,createVector(0,1,0));
     this.gameBuffer.push();
       this.gameBuffer.stroke(255);
-      if(cubeLocked)this.gameBuffer.stroke("green");
+      if(cubeLocked) this.gameBuffer.stroke("green");
       this.gameBuffer.strokeWeight(8);
       this.gameBuffer.noFill();
       this.gameBuffer.rectMode(CORNER);
