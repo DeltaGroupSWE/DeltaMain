@@ -54,7 +54,7 @@ function preload(){
 ///////////////////////////////////////////////////////////////////////////////
 function setup() {
   mCreateCanvas(windowWidth*0.8, windowHeight * 0.9, WEBGL);
-  cnv.mouseClicked(selectFace);
+  //cnv.mouseClicked(selectFace);
   cnv.doubleClicked(selectGame);
   normalMaterial();
   eyeZ = ((height/2) / tan(PI/6));
@@ -142,10 +142,6 @@ function draw() {
 }
 
 function calcRotation(){
-  if(mouseIsPressed && !cubeLocked && !autoRotate){
-    cubeRotY += (mouseX - pmouseX)*0.0025;
-    cubeRotX += -(mouseY - pmouseY)*0.0025;
-  }
   if(cubeRotY > PI) cubeRotY -= TWO_PI;
   if(cubeRotY < -PI) cubeRotY += TWO_PI;
   if(cubeRotX > PI) cubeRotX -= TWO_PI;
@@ -294,17 +290,36 @@ function doubleClicked(){
 }
 
 function mousePressed(){
-  if(!cubeLocked) return;
+  if(!cubeLocked){
+    pressed_id = objectAtMouse();
+    pressed_rotX = cubeRotX;
+    pressed_rotY = cubeRotY;
+  }
   cubeSides[gameSelected].game.handleMousePressed(scaleMouseX(),scaleMouseY());
 }
 
 function mouseReleased() {
-  if(!cubeLocked) return;
+  if(!cubeLocked){
+    released_id = objectAtMouse();
+    released_rotX = cubeRotX;
+    released_rotY = cubeRotY;
+    if(released_id === pressed_id && released_rotX === pressed_rotX && released_rotY === pressed_rotY){
+      for(let x = 0; x < cubeSides.length; x+=1){
+        //console.log(cubeSides[x].id)
+        if(cubeSides[x].id === released_id) cubeSides[x].goToFace();
+      }
+    }
+  }
   cubeSides[gameSelected].game.handleMouseReleased(scaleMouseX(),scaleMouseY());
 }
 
 function mouseDragged() {
-  if(!cubeLocked) return;
+  if(!cubeLocked) {
+    if(!cubeLocked && !autoRotate){
+      cubeRotY += (mouseX - pmouseX)*0.0025;
+      cubeRotX += -(mouseY - pmouseY)*0.0025;
+    }
+  };
   cubeSides[gameSelected].game.handleMouseDragged(scaleMouseX(),scaleMouseY());
 }
 
@@ -332,6 +347,7 @@ function scaleMouseY(){
 
 ///////////////////////////////////////////////////////////////////////////////
 //Event listener Functions
+/*
 function selectFace(){ // listener for mouseClicked
   if(cubeLocked) return;
   id = objectAtMouse();
@@ -341,7 +357,7 @@ function selectFace(){ // listener for mouseClicked
     if(cubeSides[x].id === id) cubeSides[x].goToFace();
   }
 }
-
+*/
 function selectGame(){ // listener for doubleClicked
   id = objectAtMouse();
   //console.log(id);
