@@ -34,13 +34,14 @@ class NumberPuzzle extends Puzzle {
             3: '3', //        | 3 || 4 || 5 |
             4: '4', //         ---  ---  ---
             5: '5', //        | 6 || 7 || 8 |
-            6: '6', //         ---  ---  ---
-            7: '7', //        | 9 ||  enter |
-            8: '8', //         ---  --- ---
+            6: '6', //         ---  ---  ---   ---
+            7: '7', //        | 9 ||  enter | delete |
+            8: '8', //         ---  --- ---    ---
             9: '9'
         };
 
         this.enterButton = 'enter';
+        this.deleteButton = 'delete';
 
     }
 
@@ -88,7 +89,7 @@ class NumberPuzzle extends Puzzle {
         }
 
 
-
+        //enter button setup
         const content = this.enterButton;
         this.renderer.fill(200);
         this.renderer.rect(x, y, this.boxSize * 2 + this.spacing, this.boxSize)
@@ -97,6 +98,16 @@ class NumberPuzzle extends Puzzle {
         this.renderer.textAlign(CENTER, CENTER);
         this.renderer.text(content, x + this.boxSize, y + this.boxSize / 2);
 
+        //delete button setup
+        const deleteButtonContent = this.deleteButton
+        this.renderer.fill(200);
+        this.renderer.rect(x + this.boxSize * 2.3, y, this.boxSize * 2 + this.spacing, this.boxSize)
+        this.renderer.fill(0);
+        this.renderer.textSize(this.renderer.width * 0.05);
+        this.renderer.textAlign(CENTER, CENTER);
+        this.renderer.text(deleteButtonContent, x + this.boxSize * 3.4, y + this.boxSize / 2);
+
+        //user entry box setup
         this.renderer.push();
         this.renderer.fill(200);
         this.renderer.stroke(0);
@@ -108,16 +119,19 @@ class NumberPuzzle extends Puzzle {
         this.renderer.fill(0);
         this.renderer.text(this.inputValue, this.startX + 5, this.startY + 4 * (this.boxSize + this.spacing) + 5);
 
+        // Draw the title text
         this.renderer.textSize(this.renderer.width * 0.04);
         this.renderer.textAlign(CENTER, TOP);
         this.renderer.fill(0);
-        this.renderer.text(this.titleText, this.renderer.width / 2, this.startY + 5 * (this.boxSize + this.spacing) + 5); // Draw the title text at the top
+        this.renderer.text(this.titleText, this.renderer.width / 2, this.startY + 5 * (this.boxSize + this.spacing) + 5);
 
+        // Draw the number of guesses text
         this.renderer.textSize(this.renderer.width * 0.04);
         this.renderer.textAlign(CENTER, TOP);
         this.renderer.fill(0);
-        this.renderer.text('Number of guesses: ' + this.guessCount, this.renderer.width / 2, this.startY + 6 * (this.boxSize + this.spacing) + 5); // Draw the title text at the top
+        this.renderer.text('Number of guesses: ' + this.guessCount, this.renderer.width / 2, this.startY + 6 * (this.boxSize + this.spacing) + 5);
 
+        //draw previous guesses text
         this.renderer.textSize(this.renderer.width * 0.04);
         this.renderer.textAlign(CENTER, TOP);
         this.renderer.fill(0);
@@ -138,7 +152,7 @@ class NumberPuzzle extends Puzzle {
                 this.inputValue = '';
                 this.titleText = 'You got it!';
                 console.log('solved');
-                this.gameSolved=true;
+                this.gameSolved = true;
             }
             else if (parseInt(this.inputValue) > this.randomNum) {
                 this.inputValue = '';
@@ -178,11 +192,18 @@ class NumberPuzzle extends Puzzle {
             }
         }
 
+        // Return 'enter' when the mouse is over the Enter button.
         if (mx >= x && mx <= x + this.boxSize * 2 + this.spacing && my >= y && my <= y + this.boxSize) {
-            return 'enter'; // Return 'enter' when the mouse is over the Enter button.
+            return 'enter';
         }
 
-        return -1; // Return -1 if no rectangle was clicked/hovered.
+        //Return 'delete' when mouse is over delete button
+        if (mx >= x && mx <= x + this.boxSize * 4 + this.spacing && my >= y && my <= y + this.boxSize) {
+            return 'delete';
+        }
+
+        // Return -1 if no rectangle was clicked/hovered.
+        return -1;
     }
 
 
@@ -199,6 +220,10 @@ class NumberPuzzle extends Puzzle {
             this.previousGuess = this.inputValue;
             this.checkNum();
             this.inputValueLength = 0;
+        } else if (key == 'delete') {
+            this.inputValue = ''
+            this.inputValueLength = 0;
+            console.log('pressed delete');
         }
         //checking that the input value length is only 3 integers
         if (this.inputValueLength < 3) {
