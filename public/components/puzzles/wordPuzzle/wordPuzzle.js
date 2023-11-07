@@ -98,7 +98,7 @@ class WordPuzzle extends Puzzle {
             }
         }
         this.wordsComplete++;
-        console.log(this.wordsComplete);
+        //console.log(this.wordsComplete);
         return true;
     }
 

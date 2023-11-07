@@ -1,5 +1,5 @@
 //let buttonSound;
-
+let winDebug;
 // cube globals
 let cubeScale;
 let sideLength;
@@ -123,11 +123,17 @@ function setup() {
   });
 //////////////////////////////////////////////////////////
   //rotationDisplay = createGraphics(200,200);
+  winDebug = false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 function draw() {
   mBackground(200);
+  
+  if(cubeComplete()){
+    rotateToWin();
+  }
+
   calcRotation();
   drawHUD();
   mResetMatrix();
@@ -139,6 +145,7 @@ function draw() {
     cubeSides[x].drawFace();
     mPop();
   }
+  drawHUD();
 }
 
 function calcRotation(){
@@ -157,12 +164,17 @@ function calcRotation(){
       autoRotate = false;
       cubeRotX = TargetRotX;
       cubeRotY = TargetRotY;
+      if(cubeComplete()) cubeLocked = true;
     }
   }
-  drawHUD();
 }
 
 //TODO: game win animation
+function rotateToWin(){
+  autoRotate = true;
+  TargetRotX = -QUARTER_PI;
+  TargetRotY = -QUARTER_PI;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //HUD and HUD components
@@ -182,7 +194,6 @@ function drawHUD(){
  drawTimerHUD(screenPlane);
  //drawRotationDisplay(screenPlane);
  if(displayInstructions) instructionWindow(screenPlane);
-
 }
 
 function drawTimerHUD(p){
@@ -325,6 +336,7 @@ function mouseDragged() {
 }
 
 function keyPressed(){
+  if(key === 'w') winDebug = true;
   if(displayInstructions){
     displayInstructions = false;
     loop();
@@ -375,14 +387,16 @@ function selectGame(){ // listener for doubleClicked
 }
 
 
-/* function cubeComplete(){
-  for(let x in cubeSides){
-    if(!x.game.isSolved()) return false;
+ function cubeComplete(){
+  if(winDebug) return true;
+  for(let x of cubeSides){
+    if(x.game != null) {
+      if(!x.game.isSolved()) return false;
+    }
   }
   return true;
-
 }
-*/
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //CubeFace class
@@ -419,7 +433,10 @@ class cubeFace{
       else this.gameBuffer.image(gregHappy,0,0,this.gameBuffer.width,this.gameBuffer.height);
     else this.gameBuffer.image(greg,0,0,this.gameBuffer.width,this.gameBuffer.height);
     */
-    if(this.game != null) this.game.drawGame();
+    if(this.game != null) {
+      if(this.game.isSolved()) this.gameBuffer.image(gregHappy,0,0,this.gameBuffer.width,this.gameBuffer.height);
+      else this.game.drawGame();
+    }
     //this.gameBuffer.circle(scaleMouseX(),scaleMouseY(),10);
 
     mTranslate(this.tx*sideLength/2,this.ty*sideLength/2,this.tz*sideLength/2);
