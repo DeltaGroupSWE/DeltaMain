@@ -1,24 +1,6 @@
 let flag = 0;
 //let timer;
 
-/*
-let switchflipping;
-let switchgamelose;
-let switchgamewin;
-let imgOn;
-let imgOff;
-let sOn;
-let sOff;
-function preload(){
-  switchflipping = loadSound("../../assets/sounds/switchflip.wav");
-  switchgamelose = loadSound('../../assets/sounds/switchgamelose.wav');
-  switchgamewin = loadSound("../../assets/sounds/switchgamewin.mp3")
-  imgOn = loadImage('../../assets/sprites/lighton.png');
-  imgOff = loadImage('../../assets/sprites/lightoff.png');
-  sOn = loadImage('../../assets/sprites/switchOn.png');
-  sOff = loadImage('../../assets/sprites/switchOff.png');
-}
-*/
 class flipSwitch{
   constructor(onOff, x, y, w){
     this.onOff = onOff;
@@ -127,9 +109,7 @@ class flipSwitchGame extends Puzzle{
     this.puzzleID = 1;
   }
 
-  setupGame(){
-    
-  }
+  setupGame(){}
 
   drawGame() {  
     this.drawBoard();
@@ -249,6 +229,7 @@ class flipSwitchGame extends Puzzle{
       }
       else{setupDone = true;}
     }
+
     //console.log(this.randomCounter);
     this.sw1.onOff = onOffArray[0];
     this.sw2.onOff = onOffArray[1];
@@ -256,6 +237,7 @@ class flipSwitchGame extends Puzzle{
     this.sw4.onOff = onOffArray[3];
     this.sw5.onOff = onOffArray[4];
     this.winLoss = 0;
+
   }
 
   gameInstructions(){
@@ -267,3 +249,22 @@ class flipSwitchGame extends Puzzle{
     this.renderer.text("Flipping a switch flips itself and the ones next to it, flip all 5 to yellow to win!", this.renderer.width/2, 50);
   }
 }
+
+/*
+let switchflipping;
+let switchgamelose;
+let switchgamewin;
+let imgOn;
+let imgOff;
+let sOn;
+let sOff;
+function preload(){
+  switchflipping = loadSound("../../assets/sounds/switchflip.wav");
+  switchgamelose = loadSound('../../assets/sounds/switchgamelose.wav');
+  switchgamewin = loadSound("../../assets/sounds/switchgamewin.mp3")
+  imgOn = loadImage('../../assets/sprites/lighton.png');
+  imgOff = loadImage('../../assets/sprites/lightoff.png');
+  sOn = loadImage('../../assets/sprites/switchOn.png');
+  sOff = loadImage('../../assets/sprites/switchOff.png');
+}
+*/
