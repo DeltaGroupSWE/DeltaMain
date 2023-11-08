@@ -20,7 +20,7 @@ class SliderPuzzle extends Puzzle {
     }
 
     setupGame() {
-        this.boxSize = this.w / 15; // Size of each box
+        this.boxSize = this.w / 5; // Size of each box
         this.spacing = this.w / 100; // Spacing between boxes
         this.startX = this.w / 6; // Starting X position
         this.startY = this.w / 5; // Starting Y position
@@ -39,14 +39,56 @@ class SliderPuzzle extends Puzzle {
 
         for (const key in this.puzzleState) {
             const content = this.puzzleState[key];
+            let img;
+
+            /*
             this.renderer.fill(200);
             this.renderer.rect(x, y, this.boxSize, this.boxSize);
             this.renderer.fill(0);
             this.renderer.textSize(this.boxSize / 2);
             this.renderer.textAlign(CENTER, CENTER);
-            this.renderer.text(content, x + this.boxSize / 2, y + this.boxSize / 2);
+            */
+
+
+            //this.renderer.text(content, x + this.boxSize / 2, y + this.boxSize / 2);
+
+            switch (content) {
+                case "A1":
+                    img = sliderGame.a1;
+                    break;
+                case "B1":
+                    img = sliderGame.b1;
+                    break;
+                case "C1":
+                    img = sliderGame.c1;
+                    break;
+                case "A2":
+                    img = sliderGame.a2;
+                    break;
+                case "B2":
+                    img = sliderGame.b2;
+                    break;
+                case "C2":
+                    img = sliderGame.c2;
+                    break;
+                case "A3":
+                    img = sliderGame.a3;
+                    break;
+                case "B3":
+                    img = sliderGame.b3;
+                    break;
+                case "  ":
+                    img = sliderGame.c3;
+                    break;
+                default:
+                    console.log("how did we get here");
+                    break;
+            }
+
+            this.renderer.image(img, x, y, this.w / 5, this.w / 5);
             x += this.boxSize + this.spacing;
-            if (x >= this.startX + 3 * (this.boxSize + this.spacing)) {
+
+            if (key == "C1" || key == "C2" || key == "C3") {
                 x = this.startX;
                 y += this.boxSize + this.spacing;
             }
@@ -114,7 +156,7 @@ class SliderPuzzle extends Puzzle {
 
     shufflePuzzleState() {
         const moves = ["left", "right", "up", "down"];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 10; i++) {
             const randomMove = moves[Math.floor(Math.random() * moves.length)];
             this.move(randomMove);
         }
