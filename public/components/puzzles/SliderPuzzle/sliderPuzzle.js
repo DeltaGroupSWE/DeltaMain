@@ -114,7 +114,7 @@ class SliderPuzzle extends Puzzle {
             this.puzzleState.A3 === "A3" &&
             this.puzzleState.B3 === "B3" &&
             this.puzzleState.C3 === "  ") {
-            console.log("Solved");
+            //console.log("Solved");
             return true;
         }
 
@@ -156,7 +156,7 @@ class SliderPuzzle extends Puzzle {
 
     shufflePuzzleState() {
         const moves = ["left", "right", "up", "down"];
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 25; i++) {
             const randomMove = moves[Math.floor(Math.random() * moves.length)];
             this.move(randomMove);
         }
