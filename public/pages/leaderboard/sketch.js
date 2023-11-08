@@ -30,7 +30,13 @@ createCanvas(winWidth,winHeight *.9);
  /*mousePressed Event*/
  quitButton.mousePressed(returnToMenu);
 
+ // test button for adding score to leaderboard
+  const testLeaderBoardButton = createButton("Test Leaderboard");
+  testLeaderBoardButton.position(20, 20);
+  testLeaderBoardButton.mousePressed(testLeaderboard);
+
 }
+
 function drawLeaderBoard(){
 
   const topTextSize = winWidth * 0.13;
@@ -53,6 +59,17 @@ function drawLeaderBoard(){
   text("Name",midTextXName,midTextY);
   text("Time",midTextXTime,midTextY);
     
+
+  // testing player scores
+  const playerScores = getAllPlayerScores();
+
+  let posY = midTextY + midTextSize; // Start position for scores
+  for (const playerName in playerScores) {
+    const score = playerScores[playerName];
+    posY += midTextSize;
+    text(`${playerName}: ${score}`, midTextXRank, posY);
+  }
+
 }
 
 function draw(){
@@ -62,4 +79,29 @@ drawLeaderBoard();
 
 function returnToMenu(){
     window.location.href = '../home/index.html';
+}
+
+// function for setting a players score as a cookie
+function setPlayerScore(playerName, score) {
+  document.cookie = `${playerName}=${score}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
+
+}
+
+function getAllPlayerScores(){ 
+  const cookies = document.cookie.split("; ");  
+  const playerScores = {}; 
+
+  for (const cookie of cookies) {
+    const [playerName, score] = cookie.split("=");
+    playerScores[playerName] = parseInt(score);
+  }
+
+  return playerScores;
+
+}
+
+function testLeaderboard() {
+  setPlayerScore("TestPlayer", 1500);
+
+  drawLeaderBoard();
 }
