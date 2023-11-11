@@ -23,12 +23,9 @@ class NumberPuzzle extends Puzzle {
         this.inputValueLength = 0;
         this.maxInputValue = 100;
         this.gameSolved = false;
-
-        //'Traffic light' setup
-
-        this.greenLight
-        this.yellowLight
-        this.redLight
+        this.greenLightColor = 'green';
+        this.yellowLightColor = 'yellow';
+        this.redLightColor = 'red';
 
         console.log('Constructing the puzzle');
         //...//game specific stuff
@@ -144,12 +141,17 @@ class NumberPuzzle extends Puzzle {
         this.renderer.text('Previous guess: ' + this.previousGuess, this.renderer.width / 2, this.startY + 7 * (this.boxSize + this.spacing) + 5); // Draw the title text at the top
 
         //drawing 'lights'
-        this.greenLight = this.renderer.ellipse(this.startX * 5, this.startY, this.boxSize, this.boxSize)
-        this.greenLight.fill(255, 255, 255)
+
+        this.renderer.fill(this.redLightColor);
+        this.redLight = this.renderer.ellipse(this.startX * 5, this.startY, this.boxSize, this.boxSize)
+        this.renderer.fill(this.yellowLightColor);
         this.yellowLight = this.renderer.ellipse(this.startX * 5, this.startY * 1.5, this.boxSize, this.boxSize)
-        this.yellowLight.fill(255, 255, 255)
-        this.redLight = this.renderer.ellipse(this.startX * 5, this.startY * 2, this.boxSize, this.boxSize)
-        this.redLight.fill(255, 255, 255)
+        this.renderer.fill(this.greenLightColor);
+        this.greenLight = this.renderer.ellipse(this.startX * 5, this.startY * 2, this.boxSize, this.boxSize)
+
+
+
+
     }
 
     // This is an accessor to check if the puzzle is solved
@@ -167,22 +169,35 @@ class NumberPuzzle extends Puzzle {
                 this.titleText = 'You got it!';
                 console.log('solved');
                 this.gameSolved = true;
+                this.changeLightColor()
             }
             else if (parseInt(this.inputValue) > this.randomNum) {
                 this.inputValue = '';
                 this.titleText = 'Guess is too high, guess again';
                 console.log('Guess is too high');
+                this.changeLightColor()
             }
             else {
                 this.inputValue = '';
                 this.titleText = 'Guess is too low, guess again';
                 console.log('Guess is too low')
+                this.changeLightColor()
             }
             //if the parsed integer value of inputValue is greater than 100, display error message
         } else {
             this.inputValue = '';
             this.titleText = 'Not a valid input. Numbers are between 0-100';
             console.log('Over 100 error');
+        }
+    }
+
+    changeLightColor() {
+        if (parseInt(this.inputValue) >= this.randomNum + 5 || parseInt(this.inputValue) <= this.randomNum + 5) {
+            console.log('Inside if');
+        } else if (parseInt(this.inputValue) >= this.randomNum + 10 || parseInt(this.inputValue) <= this.randomNum + 10) {
+            console.log('Inside else if');
+        } else {
+            console.log('Inside else')
         }
     }
 
