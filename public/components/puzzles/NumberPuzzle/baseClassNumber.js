@@ -23,9 +23,9 @@ class NumberPuzzle extends Puzzle {
         this.inputValueLength = 0;
         this.maxInputValue = 100;
         this.gameSolved = false;
-        this.greenLightColor = 'green';
-        this.yellowLightColor = 'yellow';
-        this.redLightColor = 'red';
+        this.greenLightColor = 'grey';
+        this.yellowLightColor = 'grey';
+        this.redLightColor = 'grey';
 
         console.log('Constructing the puzzle');
         //...//game specific stuff
@@ -141,6 +141,8 @@ class NumberPuzzle extends Puzzle {
         this.renderer.text('Previous guess: ' + this.previousGuess, this.renderer.width / 2, this.startY + 7 * (this.boxSize + this.spacing) + 5); // Draw the title text at the top
 
         //drawing 'lights'
+        this.renderer.fill(150);
+        this.renderer.rect(this.startX*4.5 , this.startY*.7, this.boxSize * 2.5, this.boxSize * 5, this.boxSize * 0.4);
 
         this.renderer.fill(this.redLightColor);
         this.redLight = this.renderer.ellipse(this.startX * 5, this.startY, this.boxSize, this.boxSize)
@@ -148,9 +150,6 @@ class NumberPuzzle extends Puzzle {
         this.yellowLight = this.renderer.ellipse(this.startX * 5, this.startY * 1.5, this.boxSize, this.boxSize)
         this.renderer.fill(this.greenLightColor);
         this.greenLight = this.renderer.ellipse(this.startX * 5, this.startY * 2, this.boxSize, this.boxSize)
-
-
-
 
     }
 
@@ -165,23 +164,27 @@ class NumberPuzzle extends Puzzle {
         //checking that the parsed integer value is less than the maxInputValue before dropping into the isSolved logic
         if (parseInt(this.inputValue) <= this.maxInputValue) {
             if (parseInt(this.inputValue) == this.randomNum) {
+                this.changeLightColor();
                 this.inputValue = '';
                 this.titleText = 'You got it!';
                 console.log('solved');
-                this.gameSolved = true;
-                this.changeLightColor()
+                this.gameSolved = true;k
+                
             }
             else if (parseInt(this.inputValue) > this.randomNum) {
+                this.changeLightColor();
                 this.inputValue = '';
                 this.titleText = 'Guess is too high, guess again';
                 console.log('Guess is too high');
-                this.changeLightColor()
+                
             }
             else {
+                this.changeLightColor();
                 this.inputValue = '';
                 this.titleText = 'Guess is too low, guess again';
+                
                 console.log('Guess is too low')
-                this.changeLightColor()
+                
             }
             //if the parsed integer value of inputValue is greater than 100, display error message
         } else {
@@ -192,14 +195,21 @@ class NumberPuzzle extends Puzzle {
     }
 
     changeLightColor() {
-        if (parseInt(this.inputValue) >= this.randomNum + 5 || parseInt(this.inputValue) <= this.randomNum + 5) {
-            console.log('Inside if');
-        } else if (parseInt(this.inputValue) >= this.randomNum + 10 || parseInt(this.inputValue) <= this.randomNum + 10) {
-            console.log('Inside else if');
+        if (parseInt(this.inputValue) >= this.randomNum - 5 && parseInt(this.inputValue) < this.randomNum + 5) {
+            this.redLightColor = 'grey';
+            this.yellowLightColor = 'grey';
+            this.greenLightColor = 'green';
+        } else if (parseInt(this.inputValue) >= this.randomNum - 15 && parseInt(this.inputValue) < this.randomNum + 15) {
+            this.redLightColor = 'grey';
+            this.yellowLightColor = 'yellow';
+            this.greenLightColor = 'grey';
         } else {
-            console.log('Inside else')
+            this.redLightColor = 'red';
+            this.yellowLightColor = 'grey';
+            this.greenLightColor = 'grey';
         }
     }
+    
 
 
     mouseOverWhichRectangle(mx, my) {
