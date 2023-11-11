@@ -24,6 +24,12 @@ class NumberPuzzle extends Puzzle {
         this.maxInputValue = 100;
         this.gameSolved = false;
 
+        //'Traffic light' setup
+
+        this.greenLight
+        this.yellowLight
+        this.redLight
+
         console.log('Constructing the puzzle');
         //...//game specific stuff
         //setting contents for the numPad
@@ -136,6 +142,14 @@ class NumberPuzzle extends Puzzle {
         this.renderer.textAlign(CENTER, TOP);
         this.renderer.fill(0);
         this.renderer.text('Previous guess: ' + this.previousGuess, this.renderer.width / 2, this.startY + 7 * (this.boxSize + this.spacing) + 5); // Draw the title text at the top
+
+        //drawing 'lights'
+        this.greenLight = this.renderer.ellipse(this.startX * 5, this.startY, this.boxSize, this.boxSize)
+        this.greenLight.fill(255, 255, 255)
+        this.yellowLight = this.renderer.ellipse(this.startX * 5, this.startY * 1.5, this.boxSize, this.boxSize)
+        this.yellowLight.fill(255, 255, 255)
+        this.redLight = this.renderer.ellipse(this.startX * 5, this.startY * 2, this.boxSize, this.boxSize)
+        this.redLight.fill(255, 255, 255)
     }
 
     // This is an accessor to check if the puzzle is solved
