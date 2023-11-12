@@ -142,7 +142,7 @@ class NumberPuzzle extends Puzzle {
 
         //drawing 'lights'
         this.renderer.fill(150);
-        this.renderer.rect(this.startX*4.5 , this.startY*.7, this.boxSize * 2.5, this.boxSize * 5, this.boxSize * 0.4);
+        this.renderer.rect(this.startX * 4.5, this.startY * .7, this.boxSize * 2.5, this.boxSize * 5, this.boxSize * 0.4);
 
         this.renderer.fill(this.redLightColor);
         this.redLight = this.renderer.ellipse(this.startX * 5, this.startY, this.boxSize, this.boxSize)
@@ -168,23 +168,23 @@ class NumberPuzzle extends Puzzle {
                 this.inputValue = '';
                 this.titleText = 'You got it!';
                 console.log('solved');
-                this.gameSolved = true;k
-                
+                this.gameSolved = true;
+
             }
             else if (parseInt(this.inputValue) > this.randomNum) {
                 this.changeLightColor();
                 this.inputValue = '';
                 this.titleText = 'Guess is too high, guess again';
                 console.log('Guess is too high');
-                
+
             }
             else {
                 this.changeLightColor();
                 this.inputValue = '';
                 this.titleText = 'Guess is too low, guess again';
-                
+
                 console.log('Guess is too low')
-                
+
             }
             //if the parsed integer value of inputValue is greater than 100, display error message
         } else {
@@ -209,7 +209,7 @@ class NumberPuzzle extends Puzzle {
             this.greenLightColor = 'grey';
         }
     }
-    
+
 
 
     mouseOverWhichRectangle(mx, my) {
