@@ -12,85 +12,53 @@ function setup() {
   timer.setupTimer();
   timer.startTimer();
 
-  /*styling button*/
-  startButton = createButton("Start Game");
-
-  // CSS styles relative to canvas size
-  const buttonWidth = winWidth * 0.4; // Adjust the button width
-  const buttonHeight = winHeight * 0.1; // Adjust the button height
-  const buttonFontSize = winWidth * 0.03; // Adjust the font size
-
-  startButton.style("background-color: #1A71E6");
-  startButton.style(`padding: ${winHeight * 0.04}px ${winWidth * 0.1}px`);
-  startButton.style("display: inline-block");
-  startButton.style("font-family: Verdana");
-  startButton.style(`margin: ${winHeight * 0.02}px ${winWidth * 0.02}px`);
-  startButton.style(`border-radius: ${winWidth * 0.04}px`);
-  startButton.style(`border: ${winWidth * 0.001}px solid #000000`);
-  startButton.style(`font-size: ${buttonFontSize}px`);
-
-  // Center the button within the canvas
-  startButton.position(
-    winWidth / 2 - buttonWidth / 2,
-    3 * (winHeight / 4) - buttonHeight / 2
-  );
-
-  /*mousePressed Event*/
-  startButton.mousePressed(startGame);
-
-  leaderButton = createButton("Leaderboard")
-
-  leaderButton.style("background-color: #1A71E6");
-  leaderButton.style(`padding: ${winHeight * 0.04}px ${winWidth * 0.1}px`);
-  leaderButton.style("display: inline-block");
-  leaderButton.style("font-family: Verdana");
-  leaderButton.style(`margin: ${winHeight * 0.02}px ${winWidth * 0.02}px`);
-  leaderButton.style(`border-radius: ${winWidth * 0.04}px`);
-  leaderButton.style(`border: ${winWidth * 0.001}px solid #000000`);
-  leaderButton.style(`font-size: ${buttonFontSize}px`);
-
- // Center the button within the canvas
-  leaderButton.position(
-   winWidth / 2 - buttonWidth / 2,
-   3 * (winHeight / 6) - buttonHeight / 2
-  );
-
-  /*mousePressed Event*/
-  leaderButton.mousePressed(toLeaderboard);
-
+  //images from 'greggy theme'
 }
 
-function drawMenuScreen() {
-  const topTextSize = winWidth * 0.15;
-  const topTextX = winWidth / 2;
-  const topTextY = winHeight * (3 / 14);
+class navButton{
+  constructor(x,y,l,h, flag){
+    this.x = x;//x position
+    this.y = y;//y position
+    this.l = l;//length of button
+    this.h = h;//height of button
+    this.flag = flag;//Whether it is leaderboard/ start
+  }
 
-  const midTextSize = winWidth * 0.075;
-  const midTextX = winWidth / 2;
-  const midTextY = winHeight * (4 / 14);
+  createNavButton(){
+    rect(this.x,this.y,this.l,this.h);
+    if(this.flag == 1){
+      textSize(48);
+      text("Start Game", (this.x), (this.y + (this.h / 2)));
+    }
+    else{
+      textSize(48);
+      text("Leaderboard", (this.x), (this.y + (this.h / 2)));
+    }
+    //console.log("rect");
+  }
 
-  const bottomTextSize = winWidth * 0.065;
-  const bottomTextX = winWidth / 2;
-  const bottomTextY = winHeight * (5 / 14);
-
-  textAlign(CENTER, CENTER);
-  textSize(topTextSize);
-  fill(102, 0, 0);
-  text("CUBE", topTextX, topTextY);
-
-  textSize(midTextSize);
-  fill(102, 54, 54, 51);
-  text("CUBE", midTextX, midTextY);
-
-  textSize(bottomTextSize);
-  fill(102, 0, 0, 24);
-  text("CUBE", bottomTextX, bottomTextY);
+  clickButton(){
+    if((mouseX > this.x) && (mouseX < this.x + this.l) && (mouseY > this.y) && (mouseY < this.y + this.h)){
+      if(this.flag == 1){window.location.href = "../cube/index.html";}
+      else{window.location.href = "../leaderboard/index.html";}
+    }
+  }
 }
+
+let bWidth = winWidth / 4;
+let bHeight = winHeight / 10;
+let yPos = winHeight / 2;//no idea why winHeight is so wierd so this for convience
+let xPos = (winWidth / 2) - (bWidth / 2);
+
+console.log(winHeight);
+
+const leaderboardNavButton = new navButton(xPos, yPos, bWidth, bHeight, 0);
+const startNavButton = new navButton(xPos, yPos + bHeight + 20, bWidth, bHeight, 1)
 
 function draw() {
   background(200);
-  drawMenuScreen();
-
+  leaderboardNavButton.createNavButton();
+  startNavButton.createNavButton();
   // updating timer
   timer.updateTimer();
 
@@ -106,6 +74,11 @@ function draw() {
   strokeWeight(3);
   text(timer.formatTime(timer.elapsedTime), width - 250, height - 750);
   pop(); // restores original state of drawing style
+}
+
+function mousePressed(){
+  leaderboardNavButton.clickButton();
+  startNavButton.clickButton();
 }
 
 function startGame() {
