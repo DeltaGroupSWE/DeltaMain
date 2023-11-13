@@ -28,7 +28,7 @@ class navButton{
 
   createNavButton(){
     fill("white")
-    rect(this.x,this.y,this.l,this.h);
+    rect(this.x, this.y, this.l, this.h, 20);
     if(this.flag == 1){
       textSize(48);
       fill("black");
@@ -52,7 +52,7 @@ class navButton{
 
 let bWidth = winWidth / 4;
 let bHeight = winHeight / 10;
-let yPos = winHeight / 2;//no idea why winHeight is so wierd so this for convience
+let yPos = winHeight / 1.75;//no idea why winHeight is so wierd so this for convience
 let xPos = (winWidth / 2) - (bWidth / 2);
 
 console.log(winHeight);
@@ -68,10 +68,10 @@ function title(){
   text("Greg^3", xPos + (xPos/15), 100);
 }
 
-let normalXPos = winWidth/10;
-let normalYPos = winHeight/10;
-let sadXPos = winWidth/2 - 100;
-let sadYPos = winHeight/5;
+let normalXPos = winWidth/2 - 100;
+let normalYPos = winHeight/5;
+let sadXPos = winWidth/10;
+let sadYPos = winHeight/10;
 let happyXPos = winWidth/1.27;
 let happyYPos = winHeight/10;
 
