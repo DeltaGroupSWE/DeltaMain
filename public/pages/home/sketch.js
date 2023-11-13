@@ -6,7 +6,9 @@ function preload() {}
 function setup() {
   createCanvas(winWidth, winHeight * 0.9);
   ///console.log(winWidth, winHeight);
-
+  gregHappy = loadImage('../../assets/sprites/bloodsugar-monitor-images/gregHappy.png');
+  gregSad = loadImage("../../assets/sprites/bloodsugar-monitor-images/gregSad.png");
+  greg = loadImage("../../assets/sprites/bloodsugar-monitor-images/greg.png")
   // intitalizing timer
   timer = new Timer();
   timer.setupTimer();
@@ -25,14 +27,17 @@ class navButton{
   }
 
   createNavButton(){
+    fill("white")
     rect(this.x,this.y,this.l,this.h);
     if(this.flag == 1){
       textSize(48);
-      text("Start Game", (this.x), (this.y + (this.h / 2)));
+      fill("black");
+      text("Start Game", (this.x + this.l / 5.5), (this.y + (this.h / (7/5))));
     }
     else{
       textSize(48);
-      text("Leaderboard", (this.x), (this.y + (this.h / 2)));
+      fill("black");
+      text("Leaderboard", (this.x + this.l / 7), (this.y + (this.h / (7/5))));
     }
     //console.log("rect");
   }
@@ -55,8 +60,22 @@ console.log(winHeight);
 const leaderboardNavButton = new navButton(xPos, yPos, bWidth, bHeight, 0);
 const startNavButton = new navButton(xPos, yPos + bHeight + 20, bWidth, bHeight, 1)
 
+function title(){
+  stroke("white")
+  strokeWeight(4);
+  textSize(96);
+  fill("black");
+  text("Greg^3", xPos, 100);
+}
+
+function gregPics(){
+  image(greg, 10, 10);
+}
+
 function draw() {
   background(200);
+  title();
+  //gregPics();
   leaderboardNavButton.createNavButton();
   startNavButton.createNavButton();
   // updating timer
@@ -79,12 +98,4 @@ function draw() {
 function mousePressed(){
   leaderboardNavButton.clickButton();
   startNavButton.clickButton();
-}
-
-function startGame() {
-  window.location.href = "../cube/index.html";
-}
-
-function toLeaderboard(){
-  window.location.href = "../leaderboard/index.html";
 }
