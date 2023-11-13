@@ -65,17 +65,26 @@ function title(){
   strokeWeight(4);
   textSize(96);
   fill("black");
-  text("Greg^3", xPos, 100);
+  text("Greg^3", xPos + (xPos/15), 100);
 }
 
+let normalXPos = winWidth/10;
+let normalYPos = winHeight/10;
+let sadXPos = winWidth/2 - 100;
+let sadYPos = winHeight/5;
+let happyXPos = winWidth/1.27;
+let happyYPos = winHeight/10;
+
 function gregPics(){
-  image(greg, 10, 10);
+  image(greg, normalXPos, normalYPos, 200, 200);
+  image(gregSad, sadXPos, sadYPos, 200, 200);
+  image(gregHappy, happyXPos, happyYPos, 200, 200);
 }
 
 function draw() {
   background(200);
   title();
-  //gregPics();
+  gregPics();
   leaderboardNavButton.createNavButton();
   startNavButton.createNavButton();
   // updating timer
