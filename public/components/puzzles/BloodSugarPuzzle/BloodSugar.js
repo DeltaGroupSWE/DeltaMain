@@ -9,7 +9,10 @@ class NumberIcon{
         this.originX = x;
         this.originY = y;
         this.isDragging = false;
+        this.numID = null;
     }
+
+    
 
     drawNumIcon(rndr) {
         
@@ -19,13 +22,13 @@ class NumberIcon{
         
         //placed the icon value in the center of the icon
         rndr.fill(255); 
-        rndr.textSize(24); 
+        rndr.textSize(rndr.height * .035); 
         rndr.textAlign(CENTER, CENTER);
         rndr.text(this.iconValue, this.x, this.y);
     };
 
     iconPressed(){
-        if (this.isInIcon() && !this.isDragging) {
+        if (this.isInIcon(mx,my) && !this.isDragging) {
         this.isDragging = true;
         }
     }
@@ -44,8 +47,6 @@ class NumberIcon{
         return dist(mx, my, this.x,this.y) < this.radius / 2;
     };
 
-
-    
 }
 
 
@@ -83,18 +84,18 @@ class Container{
         this.xPos = x;
         this.yPos = y;
         this.containerValue = ' ';
-
+        this.containsIcon = false;
 
     }
     drawContainer(rndr){
             rndr.fill(1,200,100);
-            strokeWeight(5);
-            circle(this.xPos,this.yPos, this.height);
-            fill(255); 
-            textSize(24);
-            textAlign(CENTER, CENTER);
+            rndr.strokeWeight(5);
+            rndr.circle(this.xPos,this.yPos, this.height);
+            rndr.fill(255); 
+            rndr.textSize(rndr.height * .035);
+            rndr.textAlign(CENTER, CENTER);
             let txt = this.containerValue;
-            text(txt, this.xPos, this.yPos);
+            rndr.text(txt, this.xPos, this.yPos);
         
     }
 }
@@ -119,14 +120,14 @@ class BloodSugarGame extends Puzzle {
         //createCanvas(winWidth, winHeight * 0.9);
         this.createSidePanel();
         this.createContainers();
+
+       
     }
     
     drawGame() {
         //console.log('Displaying the puzzle')
-        //background("blue");
         if (this.gamestate){
-            //background("blue");
-            this.renderer.textSize(this.w*0.2);
+            this.renderer.textSize(this.w*0.08);
             this.renderer.textAlign(CENTER, CENTER);
             this.renderer.text("Congratulations! You Win!", this.w * .5, this.w * .45);
         }
@@ -136,8 +137,6 @@ class BloodSugarGame extends Puzzle {
             this.drawContainers();
             this.drawSidePanel();
         }
-        
-
     }
 
     isSolved() {
@@ -163,7 +162,8 @@ class BloodSugarGame extends Puzzle {
 
     createSidePanel(){
         for(let i = 1; i < 5;++i){
-            let numObj = new NumberIcon(winWidth * .08, winHeight * (.17*i), this.iconValuealueArray[i-1]);
+            
+            let numObj = new NumberIcon(this.w * .09, this.h * (.17*i), this.iconValuealueArray[i-1]);
             this.icons.push(numObj);
         }
     }
@@ -175,28 +175,32 @@ class BloodSugarGame extends Puzzle {
     }
 
     drawQuestion(){
-        textSize(48);
+        this.renderer.textSize(this.h * .045);
         let question= "Get a blood sugar level of " + this.solution1;
-        text(question, winHeight*1, winWidth*.06);
+        this.renderer.text(question, this.h*.5, this.w*.06);
     }
+
+    
+    
     drawEquation(){
-        textSize(58);
-        text("+", winWidth*.40, winHeight * .41);
-        text("+", winWidth*.595, winHeight * .41);
-        text("=  ? ", winWidth*.8, winHeight * .41);
+        this.renderer.textSize(this.h * .058);
+        this.renderer.text("+", this.w*.415, this.h * .45);
+        this.renderer.text("+", this.w*.645, this.h * .45);
+        this.renderer.text("=  ? ", this.w*.855, this.h * .45);
     }
 
     createContainers(){
-        let initalPos = winWidth * .3;;
+        let initalPos = this.w * .3;;
         
         for(let i = 0; i< 3; ++i){
-            let containerObj = new Container(i+1, winHeight*0.20, 200,initalPos+(i*300), 300);
+            //constructor(ID, height, width, x, y)
+            let containerObj = new Container(i+1, this.h*0.15, 350,initalPos+(i*150), 300);
             this.containers.push(containerObj);
         }
     }
     drawContainers(){
         for (let container of this.containers) 
-            container.drawContainer();
+            container.drawContainer(this.renderer);
     }
 
 
@@ -204,9 +208,24 @@ class BloodSugarGame extends Puzzle {
         const distance = dist(num.x, num.y, container.xPos, container.yPos);
         return distance < (num.radius / 2);
     }
+    removeIcon(icon){ // after failing for a few hoursto fix the icon-icon collision glitch, it somehow works better to just remove the icons
+        let usedIcon = this.icons.indexOf(icon);
+        if (usedIcon != -1)
+            this.icons.splice(usedIcon,1);
+    }
 
 
+    restartGame() {
+        //reset containers
+        for (let container of this.containers) {
+            container.containerValue = ' ';
+            container.containsIcon = false;
+        }
+        //reset icons
+        this.icons = [];
+        this.createSidePanel();
 
+    }
     handleMouseClick(mx, my) {
         console.log('Handling puzzle\'s mouse event')
     }
@@ -225,59 +244,36 @@ class BloodSugarGame extends Puzzle {
         for (let num of this.icons) {
             let flag = false; //this flag is needed so each icon after the first works properly
             for (let container of this.containers) {
-                
                 if (this.iconContainerCollision(num, container)) {
-                    num.x = container.xPos;
-                    num.y = container.yPos;
-                    container.containerValue = num.iconValue;
-                    flag = true;
-
-                    this.setVariable(container.ContainerID, num.iconValue);
-                    break;
+                     if (!container.containsIcon || (container.containsIcon && container.containerValue === num.iconValue)){
+                        num.x = container.xPos;
+                        num.y = container.yPos;
+                        container.containerValue = num.iconValue;
+                        flag = true;
+                        this.setVariable(container.ContainerID, num.iconValue);
+                        num.numID = container.ContainerID;
+                        container.containsIcon = true;
+                        this.removeIcon(num);
+                        break;
+                    } 
                 }
             }
+
+            if (this.icons.length == 1 && !this.gamestate)//simple restart if all containers are filled and the game isnt over
+                this.restartGame();
+
             if (!flag){ //if the icon does not land within a container, theyre moved to their inital position
                 num.x = num.originX;
                 num.y = num.originY;
             }
 
             num.isDragging = false;
-
+            
         }    
     }
-
     handleKeyPressed(key){}
     handleKeyReleased(key){}
-    
 }
 
 
 
-/*
-
-
-let puzzle;
- function setup(){
-
-    puzzle = new Puzzle();
-    puzzle.setupGame();
-
-   
- }
-
- function draw(){
-    puzzle.drawGame();
- }
-
-  function mousePressed() {
-    puzzle.handleMousePressed();
-}
-
-function mouseDragged() {
-    puzzle.handleMouseDragged();
-}
-
-function mouseReleased() {
-   puzzle.handleMouseReleased();
-}
-*/
