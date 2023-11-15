@@ -4,6 +4,15 @@ let sideLength;
 let z;
 
 function preload(){
+    sprite_blueOn = loadImage('../../assets/sprites/simon/Blue_Button_On.png');
+    sprite_blueOff = loadImage('../../assets/sprites/simon/Blue_Button.png');
+    sprite_greenOn = loadImage('../../assets/sprites/simon/Green_Button_On.png');
+    sprite_greenOff = loadImage('../../assets/sprites/simon/Green_Button.png');
+    sprite_redOn = loadImage('../../assets/sprites/simon/Red_Button_On.png');
+    sprite_redOff = loadImage('../../assets/sprites/simon/Red_Button.png');
+    sprite_yellowOn = loadImage('../../assets/sprites/simon/Yellow_Button_On.png');
+    sprite_yellowOff = loadImage('../../assets/sprites/simon/Yellow_Button.png');
+    sprite_startButton = loadImage('../../assets/sprites/simon/Start_Button.png');
 }
 
 function setup() {
@@ -13,7 +22,7 @@ function setup() {
     createCamera(0,0, z);
     sideLength = side/2;
     renderer = createGraphics(sideLength,sideLength);
-    game = new BloodSugarGame(renderer, 0);
+    game = new SimonPuzzle(renderer, 0);
     game.setupGame();
 }
 

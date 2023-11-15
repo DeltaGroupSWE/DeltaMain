@@ -55,7 +55,7 @@ function generateRandomArray(length) {
 // This is a base class for all puzzles
 // All methods in this class MUST be implemented by all puzzles
 // Each puzzle should exist as a class with at least the following methods
-class NumberPuzzle extends Puzzle {
+class SimonPuzzle extends Puzzle {
     // This is the constructor. Each puzzle should use a difficulty variable,
     // even if the puzzle does not change with different difficulties
     constructor(renderer, difficulty = 0) {
@@ -76,15 +76,15 @@ class NumberPuzzle extends Puzzle {
 
         this.state = GameStates.Idle;
 
-        this.sprite_blueOn = loadImage('../../../assets/sprites/simon/Blue_Button_On.png');
-        this.sprite_blueOff = loadImage('../../../assets/sprites/simon/Blue_Button.png');
-        this.sprite_greenOn = loadImage('../../../assets/sprites/simon/Green_Button_On.png');
-        this.sprite_greenOff = loadImage('../../../assets/sprites/simon/Green_Button.png');
-        this.sprite_redOn = loadImage('../../../assets/sprites/simon/Red_Button_On.png');
-        this.sprite_redOff = loadImage('../../../assets/sprites/simon/Red_Button.png');
-        this.sprite_yellowOn = loadImage('../../../assets/sprites/simon/Yellow_Button_On.png');
-        this.sprite_yellowOff = loadImage('../../../assets/sprites/simon/Yellow_Button.png');
-        this.sprite_startButton = loadImage('../../../assets/sprites/simon/Start_Button.png');
+        this.sprite_blueOn = sprite_blueOn
+        this.sprite_blueOff = sprite_blueOff
+        this.sprite_greenOn = sprite_greenOn
+        this.sprite_greenOff = sprite_greenOff
+        this.sprite_redOn = sprite_redOn
+        this.sprite_redOff = sprite_redOff
+        this.sprite_yellowOn = sprite_yellowOn
+        this.sprite_yellowOff = sprite_yellowOff
+        this.sprite_startButton = sprite_startButton
     }
 
     setupGame() {
@@ -112,7 +112,7 @@ class NumberPuzzle extends Puzzle {
     drawGame() {
         // this.renderer.image(this.sprite_blueOn, Math.floor(this.boxWidth * 3 / 5), Math.floor(this.boxWidth * 3 / 5) , Math.floor(this.boxWidth / 4), Math.floor(this.boxWidth / 4))
         this.buttonList.map((button) => {button.drawButton(this.renderer)});
-        renderer.image(this.sprite_startButton, this.startButtonX, this.startButtonY, this.startButtonSize, this.startButtonSize);
+        this.renderer.image(this.sprite_startButton, this.startButtonX, this.startButtonY, this.startButtonSize, this.startButtonSize);
 
         // console.log(this.state)
 

@@ -61,6 +61,16 @@ function preload() {
   sliderGame.c2 = loadImage('../../assets/sprites/slider-images/c2.jpg');
   sliderGame.c3 = loadImage('../../assets/sprites/slider-images/c3.png'); //c3 is a png
 
+  sprite_blueOn = loadImage('../../assets/sprites/simon/Blue_Button_On.png');
+  sprite_blueOff = loadImage('../../assets/sprites/simon/Blue_Button.png');
+  sprite_greenOn = loadImage('../../assets/sprites/simon/Green_Button_On.png');
+  sprite_greenOff = loadImage('../../assets/sprites/simon/Green_Button.png');
+  sprite_redOn = loadImage('../../assets/sprites/simon/Red_Button_On.png');
+  sprite_redOff = loadImage('../../assets/sprites/simon/Red_Button.png');
+  sprite_yellowOn = loadImage('../../assets/sprites/simon/Yellow_Button_On.png');
+  sprite_yellowOff = loadImage('../../assets/sprites/simon/Yellow_Button.png');
+  sprite_startButton = loadImage('../../assets/sprites/simon/Start_Button.png');
+
   //buttonSound = loadSound('../../assets/sounds/button-beep.wav');
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -112,7 +122,9 @@ function setup() {
   cubeSides[0].setupFaceGame(new SliderPuzzle(cubeSides[0].gameBuffer, 0));
   cubeSides[1].setupFaceGame(new WordPuzzle(cubeSides[1].gameBuffer, 0));
   cubeSides[2].setupFaceGame(new flipSwitchGame(cubeSides[2].gameBuffer, 0));
+  cubeSides[3].setupFaceGame(new BloodSugarGame(cubeSides[3].gameBuffer, 0));
   cubeSides[4].setupFaceGame(new NumberPuzzle(cubeSides[4].gameBuffer, 0));
+  cubeSides[5].setupFaceGame(new SimonPuzzle(cubeSides[5].gameBuffer, 0));
   ///////////////////////////////////////////////////////////////////////////////
   //Timer
   timer = new Timer();
