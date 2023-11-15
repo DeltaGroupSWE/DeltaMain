@@ -8,12 +8,36 @@
   <link rel="stylesheet" type="text/css" href="../../../lib/style.css" />
   <style></style>
   <script src="../../../lib/p5.min.js"></script>
-  <script src="../../../lib/addons/p5.sound.js"></script>
+  <script src="../../../lib/addons/p5.sound.js"></script>  
+ 
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyAEyj9BSuNUD9RyPz5tdch0RC4v_e9L0k0",
+      authDomain: "deltaleaderboard.firebaseapp.com",
+      projectId: "deltaleaderboard",
+      storageBucket: "deltaleaderboard.appspot.com",
+      messagingSenderId: "861467389386",
+      appId: "1:861467389386:web:bcb174075203cf9d75f333",
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+  </script>
   <script src="sketch.js"></script>
   <script>
     var winWidth = window.innerWidth;
     var winHeight = window.innerHeight;
   </script>
+
 </head>
 
 <body>
