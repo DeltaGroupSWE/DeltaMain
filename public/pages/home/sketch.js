@@ -1,7 +1,12 @@
 let buttonSound;
 let timer;
+let unlockAudioContext
+let titleMusic;
 
-function preload() {}
+function preload() {
+  //loading title music
+  unlockAudioContext = loadSound("../../assets/sounds/soundtracks/victory.mp3")
+}
 
 function setup() {
   createCanvas(winWidth, winHeight * 0.9);
@@ -49,15 +54,18 @@ function setup() {
   leaderButton.style(`border: ${winWidth * 0.001}px solid #000000`);
   leaderButton.style(`font-size: ${buttonFontSize}px`);
 
- // Center the button within the canvas
+  // Center the button within the canvas
   leaderButton.position(
-   winWidth / 2 - buttonWidth / 2,
-   3 * (winHeight / 6) - buttonHeight / 2
+    winWidth / 2 - buttonWidth / 2,
+    3 * (winHeight / 6) - buttonHeight / 2
   );
 
   /*mousePressed Event*/
   leaderButton.mousePressed(toLeaderboard);
 
+  //Unlocking AudioContext and playing titleMusic
+  unlockAudioContext.play();
+  unlockAudioContext.onended(startTitleScreenMusic);
 }
 
 function drawMenuScreen() {
@@ -97,7 +105,7 @@ function draw() {
   // calculate x and y position relative to canvas size
   const timerTextX = width - width * 0.1;
   const timerTextY = height * 0.1;
-  
+
   // displaying timer on canvas
   push(); // saves current drawing style
   textSize(50);
@@ -112,6 +120,12 @@ function startGame() {
   window.location.href = "../cube/index.html";
 }
 
-function toLeaderboard(){
+function toLeaderboard() {
   window.location.href = "../leaderboard/index.html";
+}
+
+//Function that helps with unlocking muted AudioContext
+function startTitleScreenMusic() {
+  let titleMusic = loadSound("../../assets/sounds/soundtracks/title.mp3");
+  titleMusic.play();
 }
