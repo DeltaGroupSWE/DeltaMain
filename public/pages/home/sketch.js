@@ -5,7 +5,7 @@ let titleMusic;
 
 function preload() {
   //loading title music
-  unlockAudioContext = loadSound("../../assets/sounds/soundtracks/victory.mp3")
+  unlockAudioContext = loadSound("../../assets/sounds/soundtracks/title.mp3")
 }
 
 function setup() {
