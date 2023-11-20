@@ -5,92 +5,107 @@ function preload() {}
 
 function setup() {
   createCanvas(winWidth, winHeight * 0.9);
-  ///console.log(winWidth, winHeight);
-
+  gregHappy = loadImage('../../assets/sprites/bloodsugar-monitor-images/gregHappy.png');
+  gregSad = loadImage("../../assets/sprites/bloodsugar-monitor-images/gregSad.png");
+  greg = loadImage("../../assets/sprites/bloodsugar-monitor-images/greg.png")
   // intitalizing timer
   timer = new Timer();
   timer.setupTimer();
   timer.startTimer();
 
-  /*styling button*/
-  startButton = createButton("Start Game");
-
-  // CSS styles relative to canvas size
-  const buttonWidth = winWidth * 0.4; // Adjust the button width
-  const buttonHeight = winHeight * 0.1; // Adjust the button height
-  const buttonFontSize = winWidth * 0.03; // Adjust the font size
-
-  startButton.style("background-color: #1A71E6");
-  startButton.style(`padding: ${winHeight * 0.04}px ${winWidth * 0.1}px`);
-  startButton.style("display: inline-block");
-  startButton.style("font-family: Verdana");
-  startButton.style(`margin: ${winHeight * 0.02}px ${winWidth * 0.02}px`);
-  startButton.style(`border-radius: ${winWidth * 0.04}px`);
-  startButton.style(`border: ${winWidth * 0.001}px solid #000000`);
-  startButton.style(`font-size: ${buttonFontSize}px`);
-
-  // Center the button within the canvas
-  startButton.position(
-    winWidth / 2 - buttonWidth / 2,
-    3 * (winHeight / 4) - buttonHeight / 2
-  );
-
-  /*mousePressed Event*/
-  startButton.mousePressed(startGame);
-
-  leaderButton = createButton("Leaderboard")
-
-  leaderButton.style("background-color: #1A71E6");
-  leaderButton.style(`padding: ${winHeight * 0.04}px ${winWidth * 0.1}px`);
-  leaderButton.style("display: inline-block");
-  leaderButton.style("font-family: Verdana");
-  leaderButton.style(`margin: ${winHeight * 0.02}px ${winWidth * 0.02}px`);
-  leaderButton.style(`border-radius: ${winWidth * 0.04}px`);
-  leaderButton.style(`border: ${winWidth * 0.001}px solid #000000`);
-  leaderButton.style(`font-size: ${buttonFontSize}px`);
-
- // Center the button within the canvas
-  leaderButton.position(
-   winWidth / 2 - buttonWidth / 2,
-   3 * (winHeight / 6) - buttonHeight / 2
-  );
-
-  /*mousePressed Event*/
-  leaderButton.mousePressed(toLeaderboard);
-
+  //images from 'greggy theme'
 }
 
-function drawMenuScreen() {
-  const topTextSize = winWidth * 0.15;
-  const topTextX = winWidth / 2;
-  const topTextY = winHeight * (3 / 14);
+class navButton{
+  constructor(x,y,l,h, flag){
+    this.x = x;//x position
+    this.y = y;//y position
+    this.l = l;//length of button
+    this.h = h;//height of button
+    this.flag = flag;//Whether it is leaderboard/ start
+    this.startLabel = "Start Game";
+    this.leaderLabel = "Leaderboard";
+    this.buttonColor = 255;
+  }
 
-  const midTextSize = winWidth * 0.075;
-  const midTextX = winWidth / 2;
-  const midTextY = winHeight * (4 / 14);
+  createNavButton(){
+    fill(this.buttonColor);
+    rect(this.x, this.y, this.l, this.h, 20);
+    let startWidth = textWidth(this.startLabel);
+    let leaderWidth = textWidth(this.leaderLabel);
+    if(this.flag == 0){
+      textSize(48);
+      fill("black");
+      text(this.leaderLabel, this.x + ((this.l - (leaderWidth / 2)) / 2), (this.y + (this.h / (7/5)))); 
+      //I actually am at a loss for words
+      //dumbest line of code ever for some reason the length of the leader label was doubling
+      //it was only the length of leader. Why who knows
+    }
+    else if(this.flag == 1){
+      textSize(48);
+      fill("black");
+      text(this.startLabel, this.x + ((this.l - startWidth) / 2), (this.y + (this.h / (7/5))));
+    }
+    else{
+      console.log("Error in creating button");
+    }
+    //console.log("rect");
+  }
 
-  const bottomTextSize = winWidth * 0.065;
-  const bottomTextX = winWidth / 2;
-  const bottomTextY = winHeight * (5 / 14);
+  clickButton(){
+    if((mouseX > this.x) && (mouseX < this.x + this.l) && (mouseY > this.y) && (mouseY < this.y + this.h)){
+      if(this.flag == 1){window.location.href = "../cube/index.html";}
+      else{window.location.href = "../leaderboard/index.html";}
+    }
+  }
 
-  textAlign(CENTER, CENTER);
-  textSize(topTextSize);
-  fill(102, 0, 0);
-  text("CUBE", topTextX, topTextY);
+  highlight(){
+    if((mouseX > this.x) && (mouseX < this.x + this.l) && (mouseY > this.y) && (mouseY < this.y + this.h)){
+      this.buttonColor = 240;
+    }
+    else{
+      this.buttonColor = 255;
+    }
+  }
+}
 
-  textSize(midTextSize);
-  fill(102, 54, 54, 51);
-  text("CUBE", midTextX, midTextY);
+const bWidth = winWidth / 4;
+const bHeight = winHeight / 10;
+const yPos = (winHeight / 1.75);//no idea why winHeight is so wierd so this for convience
+const xPos = (winWidth / 2) - (bWidth / 2);
+//console.log(winHeight);
 
-  textSize(bottomTextSize);
-  fill(102, 0, 0, 24);
-  text("CUBE", bottomTextX, bottomTextY);
+const leaderboardNavButton = new navButton(xPos, yPos + bHeight + 20, bWidth, bHeight, 0);
+const startNavButton = new navButton(xPos, yPos, bWidth, bHeight, 1);
+
+function title(){
+  stroke("white")
+  strokeWeight(4);
+  textSize(96);
+  fill("black");
+  text("Greg^3", xPos + (xPos/15), 100);
+}
+
+let normalXPos = winWidth/2 - 100; //100 is half of image size
+let normalYPos = winHeight/5;
+let sadXPos = (winWidth/2 - 100) - winWidth/3; //10
+let sadYPos = winHeight/10;
+let happyXPos = (winWidth/2 - 100) + winWidth/3; //1.27
+let happyYPos = winHeight/10;
+
+function gregPics(){
+  image(greg, normalXPos, normalYPos, 200, 200);
+  image(gregSad, sadXPos, sadYPos, 200, 200);
+  image(gregHappy, happyXPos, happyYPos, 200, 200);
 }
 
 function draw() {
   background(200);
-  drawMenuScreen();
-
+  title();
+  gregPics();
+  mouseHover();
+  leaderboardNavButton.createNavButton();
+  startNavButton.createNavButton();
   // updating timer
   timer.updateTimer();
 
@@ -108,10 +123,12 @@ function draw() {
   pop(); // restores original state of drawing style
 }
 
-function startGame() {
-  window.location.href = "../cube/index.html";
+function mousePressed(){
+  leaderboardNavButton.clickButton();
+  startNavButton.clickButton();
 }
 
-function toLeaderboard(){
-  window.location.href = "../leaderboard/index.html";
+function mouseHover(){
+  leaderboardNavButton.highlight();
+  startNavButton.highlight();
 }
