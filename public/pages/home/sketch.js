@@ -25,17 +25,19 @@ class navButton{
     this.flag = flag;//Whether it is leaderboard/ start
     this.startLabel = "Start Game";
     this.leaderLabel = "Leaderboard";
+    this.buttonColor = 255;
   }
 
   createNavButton(){
-    fill("white")
+    fill(this.buttonColor);
     rect(this.x, this.y, this.l, this.h, 20);
     let startWidth = textWidth(this.startLabel);
     let leaderWidth = textWidth(this.leaderLabel);
     if(this.flag == 0){
       textSize(48);
       fill("black");
-      text(this.leaderLabel, this.x + ((this.l - (leaderWidth / 2)) / 2), (this.y + (this.h / (7/5)))); //I actually am at a loss for words
+      text(this.leaderLabel, this.x + ((this.l - (leaderWidth / 2)) / 2), (this.y + (this.h / (7/5)))); 
+      //I actually am at a loss for words
       //dumbest line of code ever for some reason the length of the leader label was doubling
       //it was only the length of leader. Why who knows
     }
@@ -54,6 +56,15 @@ class navButton{
     if((mouseX > this.x) && (mouseX < this.x + this.l) && (mouseY > this.y) && (mouseY < this.y + this.h)){
       if(this.flag == 1){window.location.href = "../cube/index.html";}
       else{window.location.href = "../leaderboard/index.html";}
+    }
+  }
+
+  highlight(){
+    if((mouseX > this.x) && (mouseX < this.x + this.l) && (mouseY > this.y) && (mouseY < this.y + this.h)){
+      this.buttonColor = 240;
+    }
+    else{
+      this.buttonColor = 255;
     }
   }
 }
@@ -92,6 +103,7 @@ function draw() {
   background(200);
   title();
   gregPics();
+  mouseHover();
   leaderboardNavButton.createNavButton();
   startNavButton.createNavButton();
   // updating timer
@@ -114,4 +126,9 @@ function draw() {
 function mousePressed(){
   leaderboardNavButton.clickButton();
   startNavButton.clickButton();
+}
+
+function mouseHover(){
+  leaderboardNavButton.highlight();
+  startNavButton.highlight();
 }
