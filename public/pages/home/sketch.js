@@ -5,7 +5,6 @@ function preload() {}
 
 function setup() {
   createCanvas(winWidth, winHeight * 0.9);
-  ///console.log(winWidth, winHeight);
   gregHappy = loadImage('../../assets/sprites/bloodsugar-monitor-images/gregHappy.png');
   gregSad = loadImage("../../assets/sprites/bloodsugar-monitor-images/gregSad.png");
   greg = loadImage("../../assets/sprites/bloodsugar-monitor-images/greg.png")
@@ -24,20 +23,29 @@ class navButton{
     this.l = l;//length of button
     this.h = h;//height of button
     this.flag = flag;//Whether it is leaderboard/ start
+    this.startLabel = "Start Game";
+    this.leaderLabel = "Leaderboard";
   }
 
   createNavButton(){
     fill("white")
     rect(this.x, this.y, this.l, this.h, 20);
-    if(this.flag == 1){
+    let startWidth = textWidth(this.startLabel);
+    let leaderWidth = textWidth(this.leaderLabel);
+    if(this.flag == 0){
       textSize(48);
       fill("black");
-      text("Start Game", (this.x + this.l / 5.5), (this.y + (this.h / (7/5))));
+      text(this.leaderLabel, this.x + ((this.l - (leaderWidth / 2)) / 2), (this.y + (this.h / (7/5)))); //I actually am at a loss for words
+      //dumbest line of code ever for some reason the length of the leader label was doubling
+      //it was only the length of leader. Why who knows
+    }
+    else if(this.flag == 1){
+      textSize(48);
+      fill("black");
+      text(this.startLabel, this.x + ((this.l - startWidth) / 2), (this.y + (this.h / (7/5))));
     }
     else{
-      textSize(48);
-      fill("black");
-      text("Leaderboard", (this.x + this.l / 7), (this.y + (this.h / (7/5))));
+      console.log("Error in creating button");
     }
     //console.log("rect");
   }
@@ -50,15 +58,14 @@ class navButton{
   }
 }
 
-let bWidth = winWidth / 4;
-let bHeight = winHeight / 10;
-let yPos = winHeight / 1.75;//no idea why winHeight is so wierd so this for convience
-let xPos = (winWidth / 2) - (bWidth / 2);
+const bWidth = winWidth / 4;
+const bHeight = winHeight / 10;
+const yPos = (winHeight / 1.75);//no idea why winHeight is so wierd so this for convience
+const xPos = (winWidth / 2) - (bWidth / 2);
+//console.log(winHeight);
 
-console.log(winHeight);
-
-const leaderboardNavButton = new navButton(xPos, yPos, bWidth, bHeight, 0);
-const startNavButton = new navButton(xPos, yPos + bHeight + 20, bWidth, bHeight, 1)
+const leaderboardNavButton = new navButton(xPos, yPos + bHeight + 20, bWidth, bHeight, 0);
+const startNavButton = new navButton(xPos, yPos, bWidth, bHeight, 1);
 
 function title(){
   stroke("white")
@@ -68,11 +75,11 @@ function title(){
   text("Greg^3", xPos + (xPos/15), 100);
 }
 
-let normalXPos = winWidth/2 - 100;
+let normalXPos = winWidth/2 - 100; //100 is half of image size
 let normalYPos = winHeight/5;
-let sadXPos = winWidth/10;
+let sadXPos = (winWidth/2 - 100) - winWidth/3; //10
 let sadYPos = winHeight/10;
-let happyXPos = winWidth/1.27;
+let happyXPos = (winWidth/2 - 100) + winWidth/3; //1.27
 let happyYPos = winHeight/10;
 
 function gregPics(){
