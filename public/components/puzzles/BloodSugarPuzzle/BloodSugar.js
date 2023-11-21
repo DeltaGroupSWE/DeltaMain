@@ -1,10 +1,11 @@
 let gamestate = false;
 //-----------------------------------------------------------------------------------------------------
 class NumberIcon{
-    constructor(x,y,num){
+    constructor(x,y,num, rad){
         this.x = x;
         this.y = y;
         this.radius = 100;
+        this.radius = rad;
         this.iconValue=num;
         this.originX = x;
         this.originY = y;
@@ -17,7 +18,7 @@ class NumberIcon{
     drawNumIcon(rndr) {
         
         rndr.fill(1,200,100);
-        rndr.strokeWeight(5);
+        rndr.strokeWeight(3);
         rndr.circle(this.x,this.y, this.radius);
         
         //placed the icon value in the center of the icon
@@ -57,20 +58,40 @@ class Equation{
         this.y = y;
         this.z = z;
     }
-    setX(num){
+    setX(num, level){
         this.x = num;
-        this.setTotal();
+        this.setTotal(level);
     }
-    setY(num){
+    setY(num, level){
         this.y = num;
-        this.setTotal();
+        this.setTotal(level);
     }
-    setZ(num){
+    setZ(num, level){
         this.z = num;
-        this.setTotal();
+        this.setTotal(level);
     }
-    setTotal(){
-        this.currentTotal = this.x + this.y + this.z;
+    setTotal(level){
+        //console.log("level:  " + this.currentLevel)
+        switch(level){
+            case 1:
+                this.currentTotal = this.x + this.y + this.z;
+                break;
+            case 2:
+                this.currentTotal = this.x * this.y + this.z;
+                break;
+            case 3:
+                this.currentTotal = this.x * this.y * this.z;
+                break;
+        }
+
+
+        // if (this.currentLevel == 1) 
+        //     this.currentTotal = this.x + this.y + this.z;
+        // else if (this.currentLevel == 2)
+        //     this.currentTotal = this.x * this.y + this.z;
+        // else if (this.currentLevel == 3)
+        //     this.currentTotal = this.x * this.y * this.z;
+
         console.log("the total is " + this.currentTotal); 
     }
 
@@ -89,7 +110,7 @@ class Container{
     }
     drawContainer(rndr){
             rndr.fill(1,200,100);
-            rndr.strokeWeight(5);
+            rndr.strokeWeight(3);
             rndr.circle(this.xPos,this.yPos, this.height);
             rndr.fill(255); 
             rndr.textSize(rndr.height * .035);
@@ -110,15 +131,25 @@ class BloodSugarGame extends Puzzle {
         this.h = this.renderer.height;
         
         this.icons = []; //places NumberIcon objects into a array
-        this.iconValuealueArray=[12,14,16,10]; //the values for each NumberIcon Object
+        //this.iconValuealueArray=[12,14,16,10]; //the values for each NumberIcon Object
+        this.IconArray = [[34,33,42,30,37], [21,25,24,23,27], [34,33,37,35,31], //++ 42 29 34 or 30 33 42 | (27 + 25 + 24)| (34 31 33)
+                          [13,10,11,9,14],  [9,11,12,14,15],  [8,11, 9, 7, 6],//+* (10 * 11 + 14)  | (9 * 12 + 11) | ((9 * 7 + 8))
+                          [6,9,5,4,7],      [3,9,5,4,6],      [7,2,5,4,8]]; //** (5 * 4 * 7) | ( 3 * 6 * 5) ( 2 * 8 * 7)
+        this.currentLevel = 1;
         this.containers = []; 
-        this.solution1 = 36; 
-        this.equationObj = new Equation(this.solution1); //creates an equation obj where the bloodsugar goal is the solution1 value
+        this.solution = [105,76,98,124,119, 71, 140, 90, 112]; 
+        this.randStart = 0;
+        this.randEnd = this.currentLevel * 3;
+
+        this.randSet = Math.floor(Math.random() * this.randEnd) + (this.randStart);
+        //console.log("random " + this.randSet);
+        this.equationObj = new Equation(this.solution[this.randSet]); 
+        
     }
 
     setupGame(){
         //createCanvas(winWidth, winHeight * 0.9);
-        this.createSidePanel();
+        this.createSidePanel(this.IconArray[this.randSet]);
         this.createContainers();
 
        
@@ -141,29 +172,52 @@ class BloodSugarGame extends Puzzle {
 
     isSolved() {
         //console.log('Checking if the puzzle is solved');
-        if(this.equationObj.currentTotal == this.solution1)
-        this.gamestate = true;
+        if(this.equationObj.currentTotal == this.solution[this.randSet] && this.currentLevel < 3){
+            //console.log("solved" + this.currentLevel);
+            this.levelUp();
+            
+        }
+            
+        else if (this.equationObj.currentTotal == this.solution[this.randSet] && this.currentLevel == 3)
+            this.gamestate = true;
         return this.gamestate;
         //console.log(gamestate);
     }
+    levelUp(){
+        //var item = items[Math.floor(Math.random()*items.length)];
+        //let it = Math.floor(Math.random() * this.IconArray.length) + (this.currentLevel * 3);
+        //console.log("rand num " + it);
+        //this.randSet = Math.floor(Math.random() * this.IconArray.length) + ((this.currentLevel-1) * 3);
+        this.randStart = this.randEnd;
+        this.randEnd = this.currentLevel * 3;
+        this.randSet = Math.floor(Math.random() * this.randEnd) + (this.randStart);
+        //console.log("randy" + this.randSet);
 
-    setVariable(ID, num){
+        ++this.currentLevel;
+        //this.restartGame();
+        //console.log(this.currentLevel);
+        this.drawQuestion();
+        this.drawEquation();
+        
+    }
+
+    setVariable(ID, num, level){
         if(ID == 1)
-            this.equationObj.setX(num);
+            this.equationObj.setX(num, level);
         else if(ID == 2)
-            this.equationObj.setY(num);
+            this.equationObj.setY(num, level);
         else if(ID == 3)
-            this.equationObj.setZ(num);
+            this.equationObj.setZ(num, level);
 
         this.isSolved();
         
     }
 
 
-    createSidePanel(){
-        for(let i = 1; i < 5;++i){
+    createSidePanel(arr){
+        for(let i = 1; i < arr.length+1;++i){
             
-            let numObj = new NumberIcon(this.w * .09, this.h * (.17*i), this.iconValuealueArray[i-1]);
+            let numObj = new NumberIcon(this.w * .12, this.h * (.17 *i), arr[i-1], this.w*.15);//9,17,15
             this.icons.push(numObj);
         }
     }
@@ -175,17 +229,30 @@ class BloodSugarGame extends Puzzle {
     }
 
     drawQuestion(){
-        this.renderer.textSize(this.h * .045);
-        let question= "Get a blood sugar level of " + this.solution1;
+        this.renderer.textSize(this.h * .055);//45
+        let question= "Get a blood sugar level of " + this.solution[this.randSet];
         this.renderer.text(question, this.h*.5, this.w*.06);
     }
 
     
     
     drawEquation(){
+        let symbol1, symbol2;
+        switch(this.currentLevel){
+            case 1:
+                symbol1= "+",symbol2 = "+";
+                break;
+            case 2:
+                symbol1 = "x",symbol2 = "+";
+                break;
+            case 3:
+                symbol1 = "x",symbol2 = "x";
+                break;
+        }
+
         this.renderer.textSize(this.h * .058);
-        this.renderer.text("+", this.w*.415, this.h * .45);
-        this.renderer.text("+", this.w*.645, this.h * .45);
+        this.renderer.text(symbol1, this.w*.415, this.h * .45);
+        this.renderer.text(symbol2, this.w*.645, this.h * .45);
         this.renderer.text("=  ? ", this.w*.855, this.h * .45);
     }
 
@@ -194,7 +261,7 @@ class BloodSugarGame extends Puzzle {
         
         for(let i = 0; i< 3; ++i){
             //constructor(ID, height, width, x, y)
-            let containerObj = new Container(i+1, this.h*0.15, 350,initalPos+(i*150), 300);
+            let containerObj = new Container(i+1, this.h*0.15, 350,initalPos+(i*(this.w*.23)), (this.h*.45)); //1,.15,350,.23,.45
             this.containers.push(containerObj);
         }
     }
@@ -212,19 +279,30 @@ class BloodSugarGame extends Puzzle {
         let usedIcon = this.icons.indexOf(icon);
         if (usedIcon != -1)
             this.icons.splice(usedIcon,1);
+        
+        
+        
+
     }
 
 
     restartGame() {
         //reset containers
-        for (let container of this.containers) {
-            container.containerValue = ' ';
-            container.containsIcon = false;
-        }
+        // for (let container of this.containers) {
+        //     container.containerValue = ' ';
+        //     container.containsIcon = false;
+        //     //console.log("value: " + container.containerValue + " has icon? " + container.containsIcon);
+        // }
+        this.containers = [];
+        this.createContainers();
+        //this.drawContainers();
+        
+   
         //reset icons
         this.icons = [];
-        this.createSidePanel();
-
+        this.createSidePanel(this.IconArray[this.randSet]);
+        this.equationObj.currentTotal = 0;
+        console.log("the total is " + this.equationObj.currentTotal); 
     }
     handleMouseClick(mx, my) {
         console.log('Handling puzzle\'s mouse event')
@@ -245,12 +323,13 @@ class BloodSugarGame extends Puzzle {
             let flag = false; //this flag is needed so each icon after the first works properly
             for (let container of this.containers) {
                 if (this.iconContainerCollision(num, container)) {
+                    //if the container isnt holding an iron OR if the container isnt holding an icon and
                      if (!container.containsIcon || (container.containsIcon && container.containerValue === num.iconValue)){
                         num.x = container.xPos;
                         num.y = container.yPos;
                         container.containerValue = num.iconValue;
                         flag = true;
-                        this.setVariable(container.ContainerID, num.iconValue);
+                        this.setVariable(container.ContainerID, num.iconValue,this.currentLevel);
                         num.numID = container.ContainerID;
                         container.containsIcon = true;
                         this.removeIcon(num);
@@ -259,13 +338,13 @@ class BloodSugarGame extends Puzzle {
                 }
             }
 
-            if (this.icons.length == 1 && !this.gamestate)//simple restart if all containers are filled and the game isnt over
-                this.restartGame();
-
+            
             if (!flag){ //if the icon does not land within a container, theyre moved to their inital position
                 num.x = num.originX;
                 num.y = num.originY;
             }
+            if (this.icons.length == 2 && !this.gamestate)//simple restart if all containers are filled and the game isnt over
+            this.restartGame();
 
             num.isDragging = false;
             
