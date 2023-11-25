@@ -29,6 +29,7 @@ let rotationDisplay;
 let switchflipping;
 let switchgamelose;
 let switchgamewin;
+let backgroundMusic;
 let imgOn;
 let imgOff;
 let sOn;
@@ -41,7 +42,8 @@ const sliderGame = {};
 function preload() {
   switchflipping = loadSound("../../assets/sounds/switchflip.wav");
   switchgamelose = loadSound('../../assets/sounds/switchgamelose.wav');
-  switchgamewin = loadSound("../../assets/sounds/switchgamewin.mp3")
+  switchgamewin = loadSound("../../assets/sounds/switchgamewin.mp3");
+  backgroundMusic = loadSound("../../assets/sounds/soundtracks/game.mp3");
   imgOn = loadImage('../../assets/sprites/lighton.png');
   imgOff = loadImage('../../assets/sprites/lightoff.png');
   sOn = loadImage('../../assets/sprites/switchOn.png');
@@ -148,6 +150,10 @@ function setup() {
   //////////////////////////////////////////////////////////
   //rotationDisplay = createGraphics(200,200);
   winDebug = false;
+
+  //////////////////////////////////////////////////////////
+  //Music for game
+  backgroundMusic.play();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
