@@ -1,35 +1,28 @@
-
 let quitButton;
 let leaderboard;
-let database;
-let playerScores = {};
+let playerScores = [];
 
-let endGameButton;
+function preload() {
+  loadJSON('leaderboard.json', function(data) {
+    playerScores = data.scores;
+  });
+}
 
 function setup() {
-  createCanvas(winWidth, winHeight * 0.9);
-
+  createCanvas(windowWidth, windowHeight * 0.9);
 
   // Styling button
   quitButton = createButton("Return to Menu");
   styleButton(quitButton, winWidth * 0.02, winHeight * 0.02, winWidth * 0.01);
   positionButton(quitButton, winHeight * 0.04, winWidth * -0.04, 3 * (winHeight / 4));
-
   quitButton.mousePressed(returnToMenu);
 
-  leaderboard = new Leaderboard(database);
-
-  endGameButton = createButton("End Game");
-  styleButton(endGameButton, winWidth * 0.02, winHeight * 0.02, winWidth * 0.01);
-  positionButton(endGameButton, winHeight * 0.04, winWidth * -0.04, (winHeight / 2));
-  endGameButton.mousePressed(endGame);
-
+  leaderboard = new Leaderboard();
 }
 
 function draw() {
   background(200);
   leaderboard.draw(playerScores);
-  leaderboard.draw();
 }
 
 class Leaderboard {
@@ -45,7 +38,7 @@ class Leaderboard {
     this.midTextY = winHeight * (5 / 14);
   }
 
-  draw() {
+  draw(playerScores) {
     textAlign(CENTER, CENTER);
     textSize(this.topTextSize);
     fill(102, 0, 0);
@@ -57,10 +50,12 @@ class Leaderboard {
     text("Time", this.midTextXTime, this.midTextY);
 
     let posY = this.midTextY + this.midTextSize; // Start position for scores
-    for (const playerName in playerScores) {
-      const score = playerScores[playerName];
+    for (let i = 0; i < playerScores.length; i++) {
+      const playerData = playerScores[i];
       posY += this.midTextSize;
-      text(`${playerName}: ${score}`, this.midTextXRank, posY);
+      text(i + 1, this.midTextXRank, posY); // Display rank
+      text(playerData.playerName, this.midTextXName, posY); // Display playerName
+      text(playerData.score, this.midTextXTime, posY); // Display score
     }
   }
 }
@@ -69,7 +64,7 @@ function returnToMenu() {
   window.location.href = '../home/index.html';
 }
 
-// Helper functions for styling and positioning the button
+// Helper function for styling and positioning the button
 function styleButton(button, width, height, fontSize) {
   button.style("background-color: #1A71E6");
   button.style(`padding: ${height}px ${width}px`);
@@ -84,32 +79,3 @@ function styleButton(button, width, height, fontSize) {
 function positionButton(button, topMargin, leftMargin, yPos) {
   button.position(winWidth / 2 - button.width / 2 + leftMargin, yPos - topMargin);
 }
-/*
-function endGame() {
-  const playerName = "Player1";
-  const playerScore = 1500;
-
-  // Update playerScores with the new score
-  playerScores[playerName] = playerScore;
-
-  // Add the player score to the database
-  addPlayerScore(playerName, playerScore, database);
-}
-
-// Helper function for styling and positioning the button
-function addPlayerScore(playerName, score, database) {
-  // Get a reference to the "scores" node in your database
-  const scoresRef = ref(database, 'leaderboard/scores');
-
-  // Generate a unique ID for the new score entry
-  const newScoreRef = push(scoresRef);
-
-  // Set the data for the new score entry
-  set(newScoreRef, {
-    playerName: playerName,
-    score: score
-  });
-
-  console.log(`Score added for ${playerName}: ${score}`);
-}
-*/

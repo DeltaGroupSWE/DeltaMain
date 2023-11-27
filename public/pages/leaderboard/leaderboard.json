@@ -1,0 +1,8 @@
+{
+  "scores": [
+    {"playerName": "Player1", "score": 1500},
+    {"playerName": "Player2", "score": 1600},
+    {"playerName": "Player3", "score": 1400},
+    {"playerName": "Player4", "score": 1700}
+  ]
+}
