@@ -2,17 +2,21 @@ let buttonSound;
 let timer;
 let unlockAudioContext
 let titleMusic;
+let gregHappy;
+let gregSad;
+let greg;
 
 function preload() {
   //loading title music
-  unlockAudioContext = loadSound("../../assets/sounds/soundtracks/title.mp3")
+  unlockAudioContext = loadSound("../../assets/sounds/soundtracks/title.mp3");
+  gregHappy = loadImage('../../assets/sprites/bloodsugar-monitor-images/gregHappy.png');
+  gregSad = loadImage("../../assets/sprites/bloodsugar-monitor-images/gregSad.png");
+  greg = loadImage("../../assets/sprites/bloodsugar-monitor-images/greg.png")
 }
 
 function setup() {
   createCanvas(winWidth, winHeight * 0.9);
-  gregHappy = loadImage('../../assets/sprites/bloodsugar-monitor-images/gregHappy.png');
-  gregSad = loadImage("../../assets/sprites/bloodsugar-monitor-images/gregSad.png");
-  greg = loadImage("../../assets/sprites/bloodsugar-monitor-images/greg.png")
+
   // intitalizing timer
   timer = new Timer();
   timer.setupTimer();
