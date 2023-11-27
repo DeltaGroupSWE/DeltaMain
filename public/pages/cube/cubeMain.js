@@ -25,6 +25,15 @@ let cubeLocked;
 let gameSelected;
 let rotationDisplay;
 
+//win graphic
+let winGraphic;
+let winFrameStart;
+let winX;
+let winY;
+let winXVel;
+let winYVel;
+let winOnce;
+
 ///////////////////////////////////////////////////////////////////////////////
 let switchflipping;
 let switchgamelose;
@@ -93,14 +102,14 @@ function setup() {
   cubeRotY = -QUARTER_PI;
   const l = 1;//sideLength/2;
   colorCodes = [color(255, 45, 0), color(255, 130, 0), color(0, 255, 239), color(255, 0, 208), color(0, 255, 38), color(0, 19, 255)];
-  faceColors = ['SwitchPuzzle', 'NumberPuzzle', 'wordPuzzle', 'SliderPuzzle', 'faceGreen', 'faceBlue'];
+  //faceColors = ['SwitchPuzzle', 'NumberPuzzle', 'wordPuzzle', 'SliderPuzzle', 'faceGreen', 'faceBlue'];
   let id = 101;
-  cubeSides.push(new cubeFace(0, 0, l, 0, 0, colorCodes[0], faceColors[0], id));    //front
-  cubeSides.push(new cubeFace(0, 0, -l, 0, -PI, colorCodes[1], faceColors[1], id + 10));  //back
-  cubeSides.push(new cubeFace(l, 0, 0, 0, HALF_PI, colorCodes[2], faceColors[2], id + 20));  //right
-  cubeSides.push(new cubeFace(-l, 0, 0, 0, -HALF_PI, colorCodes[3], faceColors[3], id + 30));  //left
-  cubeSides.push(new cubeFace(0, -l, 0, HALF_PI, 0, colorCodes[4], faceColors[4], id + 40));  //top
-  cubeSides.push(new cubeFace(0, l, 0, -HALF_PI, 0, colorCodes[5], faceColors[5], id + 50));  //bottom
+  cubeSides.push(new cubeFace(0, 0, l, 0, 0, colorCodes[0], id));    //front
+  cubeSides.push(new cubeFace(0, 0, -l, 0, -PI, colorCodes[1],  id + 10));  //back
+  cubeSides.push(new cubeFace(l, 0, 0, 0, HALF_PI, colorCodes[2], id + 20));  //right
+  cubeSides.push(new cubeFace(-l, 0, 0, 0, -HALF_PI, colorCodes[3], id + 30));  //left
+  cubeSides.push(new cubeFace(0, -l, 0, HALF_PI, 0, colorCodes[4], id + 40));  //top
+  cubeSides.push(new cubeFace(0, l, 0, -HALF_PI, 0, colorCodes[5], id + 50));  //bottom
   ///////////////////////////////////////////////////////////////////////////////
   //Cube autorotation vars
   TargetRotX = 0;
@@ -108,6 +117,14 @@ function setup() {
   autoRotate = false;
   cubeLocked = false;
   gameSelected = -1;
+
+  winGraphic = createGraphics(width*0.9,height*0.9)
+  winGraphic.noFill()
+  winX=0;
+  winY=0;
+  winXVel = 5;
+  winYVel = 5;
+  winOnce = false;
   ///////////////////////////////////////////////////////////////////////////////
   //Game setup
   //
@@ -160,7 +177,7 @@ function setup() {
 function draw() {
   mBackground(200);
 
-  if (cubeComplete()) {
+  if (cubeComplete() && !winOnce) {
     rotateToWin();
   }
 
@@ -174,7 +191,7 @@ function draw() {
     cubeSides[x].drawFace();
     mPop();
   }
-  drawHUD();
+  //drawHUD();
 }
 
 function calcRotation() {
@@ -203,12 +220,16 @@ function rotateToWin() {
   autoRotate = true;
   TargetRotX = -QUARTER_PI;
   TargetRotY = -QUARTER_PI;
+  winFrameStart = frameCount;
+  timer.stopTimer()
+  winOnce = true;
+  console.log("only once")
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //HUD and HUD components
 function drawHUD() {
-  let screenPlane = eyeZ * 9 / 10 - 1;
+  let screenPlane = (eyeZ * 9 / 10) ;
   /*
   //near plane reference 
   let cubeProjSize = (z*sideLength)/(10*(z-sideLength/2)); // same equation for figuring out mouse inputs to a game rendered on a cube face?
@@ -223,6 +244,7 @@ function drawHUD() {
   drawTimerHUD(screenPlane);
   //drawRotationDisplay(screenPlane);
   if (displayInstructions) instructionWindow(screenPlane);
+  if (cubeComplete()) drawWinAni(screenPlane);
 }
 
 function drawTimerHUD(p) {
@@ -306,6 +328,26 @@ function instructionWindow(p) {
   plane(urw / 10, urh / 10);
   pop();
   instructionWindow.clear();
+}
+
+function drawWinAni(p){
+  winX += winXVel;
+  if(winX > winGraphic.width-greg.width/2 || winX < 0) winXVel *= -1;
+
+  winY += winYVel;
+  if(winY > winGraphic.height-greg.height/2 || winY < 0) winYVel *= -1;
+
+  if(frameCount % 5 === 0) winGraphic.image(greg, winX, winY,(greg.width/2),(greg.height/2));
+  
+  push();
+  translate(0,0,p);
+  //stroke(255)
+  //strokeWeight(1)
+  //noStroke();
+  noFill()
+  texture(winGraphic);
+  plane(winGraphic.width/9, winGraphic.height/9);
+  pop();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -431,14 +473,14 @@ function cubeComplete() {
 //CubeFace class
 //Contains Graphics object and Puzzle Object as members
 class cubeFace {
-  constructor(tx, ty, tz, rx, ry, col, name, id) {
+  constructor(tx, ty, tz, rx, ry, col, id) {
     this.tx = tx;
     this.ty = ty;
     this.tz = tz;
     this.rx = rx;
     this.ry = ry;
     this.col = col;
-    this.name = name;
+    //this.name = name;
     this.id = id;
     this.gameBuffer = createGraphics(sideLength, sideLength);
     this.game = null;
