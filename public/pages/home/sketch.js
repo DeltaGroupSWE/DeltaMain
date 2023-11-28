@@ -9,9 +9,9 @@ let greg;
 function preload() {
   //loading title music
   unlockAudioContext = loadSound("../../assets/sounds/soundtracks/title.mp3");
-  gregHappy = loadImage('../../assets/sprites/bloodsugar-monitor-images/gregHappy.png');
-  gregSad = loadImage("../../assets/sprites/bloodsugar-monitor-images/gregSad.png");
-  greg = loadImage("../../assets/sprites/bloodsugar-monitor-images/greg.png")
+  greg = loadImage('../../assets/sprites/bloodsugar-monitor-images/greg.png');
+  gregHappy = loadImage('../../assets/sprites/bloodsugar-monitor-images/greghappy.png');
+  gregSad = loadImage('../../assets/sprites/bloodsugar-monitor-images/gregsad.png');
 }
 
 function setup() {
