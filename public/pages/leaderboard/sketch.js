@@ -39,6 +39,7 @@ class Leaderboard {
   }
 
   draw(playerScores) {
+    playerScores.sort((a, b) => a.score - b.score);
     textAlign(CENTER, CENTER);
     textSize(this.topTextSize);
     fill(102, 0, 0);
