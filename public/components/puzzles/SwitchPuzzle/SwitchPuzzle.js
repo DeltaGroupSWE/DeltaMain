@@ -116,6 +116,7 @@ class flipSwitchGame extends Puzzle{
     this.gameState();
     this.gameInstructions();
   }
+  
 
   isSolved() {
     //console.log('Checking if the puzzle is solved')
