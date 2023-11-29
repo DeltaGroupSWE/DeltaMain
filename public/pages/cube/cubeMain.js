@@ -229,7 +229,7 @@ function rotateToWin() {
 ///////////////////////////////////////////////////////////////////////////////
 //HUD and HUD components
 function drawHUD() {
-  let screenPlane = (eyeZ * 9 / 10) ;
+  let screenPlane = Math.floor(eyeZ * 9 / 10) ;
   /*
   //near plane reference 
   let cubeProjSize = (z*sideLength)/(10*(z-sideLength/2)); // same equation for figuring out mouse inputs to a game rendered on a cube face?
