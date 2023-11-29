@@ -112,7 +112,8 @@ class SimonPuzzle extends Puzzle {
     drawGame() {
         // this.renderer.image(this.sprite_blueOn, Math.floor(this.boxWidth * 3 / 5), Math.floor(this.boxWidth * 3 / 5) , Math.floor(this.boxWidth / 4), Math.floor(this.boxWidth / 4))
         this.buttonList.map((button) => {button.drawButton(this.renderer)});
-        this.renderer.image(this.sprite_startButton, this.startButtonX, this.startButtonY, this.startButtonSize, this.startButtonSize);
+        if(this.state == GameStates.Idle)
+             this.renderer.image(this.sprite_startButton, this.startButtonX, this.startButtonY, this.startButtonSize, this.startButtonSize);
 
         // console.log(this.state)
 
@@ -163,7 +164,7 @@ class SimonPuzzle extends Puzzle {
                 this.buttonList[this.buttonOrder[this.currentLight]].flash();
             }else {
                 this.state = GameStates.Playing;
-                this.currentLight = 0;
+                this.currentLight = -1;
             }
             this.currentLight += 1;
         }
@@ -188,13 +189,16 @@ class SimonPuzzle extends Puzzle {
                         this.currentLight = 0;
                         this.currentTurn += 1;
                         this.lastDisplayPhase = millis();
-                        if(currentTurn > 10) {
+                        if(this.currentTurn > 10) {
                             this.state = GameStates.Win;
                             this.gameSolved = true;
                         }else {
                             this.state = GameStates.Display;
                         }
                     }
+                } else {
+                    this.state = GameStates.Idle;
+                    this.buttonList.map((b) => b.flash());
                 }
             }
         }
