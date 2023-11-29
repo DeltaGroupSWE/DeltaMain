@@ -1,11 +1,12 @@
 class SimonButton {
-    constructor(x, y, sprite_on, sprite_off) {
+    constructor(x, y, width, sprite_on, sprite_off, sound) {
         this.x = x;
         this.y = y;
         this.sprite_on = sprite_on;
         this.sprite_off = sprite_off;
         this.on = false;
-        this.w = 240;
+        this.w = width;
+        this.sound = sound
     }
 
     getX () {
@@ -21,6 +22,7 @@ class SimonButton {
     }
 
     flash () {
+        this.sound.play();
         this.on = true;
         this.timeOn = millis();
     }
@@ -72,7 +74,7 @@ class SimonPuzzle extends Puzzle {
 
         this.startButtonX = Math.floor(this.boxWidth * 0.415);
         this.startButtonY = Math.floor(this.boxWidth * 0.415);
-        this.startButtonSize = 160;
+        this.startButtonSize = Math.floor(this.boxWidth * 0.16);
 
         this.state = GameStates.Idle;
 
@@ -100,10 +102,10 @@ class SimonPuzzle extends Puzzle {
         this.lastDisplayPhase = millis();
         
         this.buttonList = [
-            new SimonButton(Math.floor(this.boxWidth * 0.5), Math.floor(this.boxWidth * 0.5), this.sprite_blueOn, this.sprite_blueOff),
-            new SimonButton(Math.floor(this.boxWidth * 0.5), Math.floor(this.boxWidth * 0.25), this.sprite_redOn, this.sprite_redOff),
-            new SimonButton(Math.floor(this.boxWidth * 0.25), Math.floor(this.boxWidth * 0.25), this.sprite_greenOn, this.sprite_greenOff),
-            new SimonButton(Math.floor(this.boxWidth * 0.25), Math.floor(this.boxWidth * 0.5), this.sprite_yellowOn, this.sprite_yellowOff)
+            new SimonButton(Math.floor(this.boxWidth * 0.5), Math.floor(this.boxWidth * 0.5), Math.floor(this.boxWidth * 0.24), this.sprite_blueOn, this.sprite_blueOff, blue_sound),
+            new SimonButton(Math.floor(this.boxWidth * 0.5), Math.floor(this.boxWidth * 0.25), Math.floor(this.boxWidth * 0.24), this.sprite_redOn, this.sprite_redOff, red_sound),
+            new SimonButton(Math.floor(this.boxWidth * 0.25), Math.floor(this.boxWidth * 0.25), Math.floor(this.boxWidth * 0.24), this.sprite_greenOn, this.sprite_greenOff, green_sound),
+            new SimonButton(Math.floor(this.boxWidth * 0.25), Math.floor(this.boxWidth * 0.5), Math.floor(this.boxWidth * 0.24), this.sprite_yellowOn, this.sprite_yellowOff, yellow_sound)
         ]
     }
 
@@ -112,7 +114,8 @@ class SimonPuzzle extends Puzzle {
     drawGame() {
         // this.renderer.image(this.sprite_blueOn, Math.floor(this.boxWidth * 3 / 5), Math.floor(this.boxWidth * 3 / 5) , Math.floor(this.boxWidth / 4), Math.floor(this.boxWidth / 4))
         this.buttonList.map((button) => {button.drawButton(this.renderer)});
-        this.renderer.image(this.sprite_startButton, this.startButtonX, this.startButtonY, this.startButtonSize, this.startButtonSize);
+        if(this.state == GameStates.Idle)
+             this.renderer.image(this.sprite_startButton, this.startButtonX, this.startButtonY, this.startButtonSize, this.startButtonSize);
 
         // console.log(this.state)
 
@@ -163,7 +166,7 @@ class SimonPuzzle extends Puzzle {
                 this.buttonList[this.buttonOrder[this.currentLight]].flash();
             }else {
                 this.state = GameStates.Playing;
-                this.currentLight = 0;
+                this.currentLight = -1;
             }
             this.currentLight += 1;
         }
@@ -188,13 +191,16 @@ class SimonPuzzle extends Puzzle {
                         this.currentLight = 0;
                         this.currentTurn += 1;
                         this.lastDisplayPhase = millis();
-                        if(currentTurn > 10) {
+                        if(this.currentTurn > 10) {
                             this.state = GameStates.Win;
                             this.gameSolved = true;
                         }else {
                             this.state = GameStates.Display;
                         }
                     }
+                } else {
+                    this.state = GameStates.Idle;
+                    this.buttonList.map((b) => b.flash());
                 }
             }
         }
