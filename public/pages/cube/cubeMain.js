@@ -72,6 +72,10 @@ function preload() {
   sliderGame.c2 = loadImage('../../assets/sprites/slider-images/c2.jpg');
   sliderGame.c3 = loadImage('../../assets/sprites/slider-images/c3.png'); //c3 is a png
 
+  blue_sound = loadSound('../../assets/sounds/simon/blue_sound.mp3');
+  green_sound = loadSound('../../assets/sounds/simon/green_sound.mp3');
+  red_sound = loadSound('../../assets/sounds/simon/red_sound.mp3');
+  yellow_sound = loadSound('../../assets/sounds/simon/yellow_sound.mp3');
   sprite_blueOn = loadImage('../../assets/sprites/simon/Blue_Button_On.png');
   sprite_blueOff = loadImage('../../assets/sprites/simon/Blue_Button.png');
   sprite_greenOn = loadImage('../../assets/sprites/simon/Green_Button_On.png');
