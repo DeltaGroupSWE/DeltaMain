@@ -241,12 +241,10 @@ class flipSwitchGame extends Puzzle{
   }
 
   gameInstructions(){
-    this.renderer.stroke('white');
-    this.renderer.strokeWeight(1);
     this.renderer.textSize(this.renderer.width*0.025);
     this.renderer.textAlign(CENTER);
     this.renderer.fill('black');
-    this.renderer.text("Flipping a switch flips itself and the ones next to it, flip all 5 to yellow to win!", this.renderer.width/2, 50);
+    this.renderer.text("Flipping a switch flips itself and the ones next to it, flip all 5 to one color to win!", this.renderer.width/2, 50);
   }
 }
 
