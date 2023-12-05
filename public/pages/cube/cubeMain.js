@@ -411,7 +411,7 @@ function mouseDragged() {
 }
 
 function keyPressed() {
-  if (key === 'w') winDebug = true;
+  if (key === 'w' && !cubeLocked) winDebug = true;
   if (displayInstructions) {
     displayInstructions = false;
     loop();
