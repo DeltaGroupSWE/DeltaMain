@@ -141,8 +141,8 @@ class BloodSugarGame extends Puzzle {
         this.randStart = 0;
         this.randEnd = this.currentLevel * 3;
 
-        this.randSet = Math.floor(Math.random() * this.randEnd) + (this.randStart);
-        //console.log("random " + this.randSet);
+        this.randSet = Math.floor(Math.random() * 3) ;
+        console.log("random " + this.randSet);
         this.equationObj = new Equation(this.solution[this.randSet]); 
         
     }
@@ -188,12 +188,18 @@ class BloodSugarGame extends Puzzle {
         //let it = Math.floor(Math.random() * this.IconArray.length) + (this.currentLevel * 3);
         //console.log("rand num " + it);
         //this.randSet = Math.floor(Math.random() * this.IconArray.length) + ((this.currentLevel-1) * 3);
+
         this.randStart = this.randEnd;
         this.randEnd = this.currentLevel * 3;
-        this.randSet = Math.floor(Math.random() * this.randEnd) + (this.randStart);
-        //console.log("randy" + this.randSet);
-
         ++this.currentLevel;
+
+        if (this.currentLevel == 2)
+            this.randSet = Math.floor(Math.random() * 3) + (3);
+            if (this.currentLevel == 3)
+            this.randSet = Math.floor(Math.random() * 3) + (6);
+        console.log("randy" + this.randSet);
+
+       
         //this.restartGame();
         //console.log(this.currentLevel);
         this.drawQuestion();
